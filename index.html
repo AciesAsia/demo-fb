@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NZB Demo Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:  #3D5A80;
+      --mid:      #98C1D9;
+      --light:    #E0FBFC;
+      --accent:   #EE6C4D;
+      --dark:     #293241;
+      --bg:       #edf0f5;
+      --white:    #ffffff;
+      --text:     #1a2a40;
+    }
+
+    body {
+      font-family: 'Comfortaa', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--dark);
+      padding: 0 28px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav { display: flex; gap: 32px; }
+    nav a {
+      color: var(--light);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--white); }
+
+    .logo-sq {
+      width: 44px; height: 44px;
+      background: #202020;
+      border: 1px solid #444;
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .logo-sq img { width: 36px; height: 36px; object-fit: contain; }
+
+    .hero {
+      background: var(--primary);
+      color: var(--white);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: var(--light);
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1rem;
+      color: var(--mid);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .cards {
+      background: var(--bg);
+      flex: 1;
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 4rem 2rem;
+    }
+
+    .card {
+      background: var(--white);
+      border-left: 5px solid var(--primary);
+      border-radius: 10px;
+      padding: 2rem 1.75rem;
+      width: 240px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.13);
+    }
+    .card-icon { font-size: 2rem; }
+    .card h2 { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+
+    footer {
+      background: var(--dark);
+      color: var(--mid);
+      text-align: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="fb/index.html">F&amp;B</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="index.html" class="logo-sq">
+      <img src="NZB_Logo_001.png" alt="NZB Consulting" />
+    </a>
+  </header>
+
+  <section class="hero">
+    <h1>NZB Demo Site</h1>
+    <p>Interactive analytics and dashboards. Select a section below to explore.</p>
+  </section>
+
+  <section class="cards">
+    <a class="card" href="fb/index.html">
+      <div class="card-icon">🍽️</div>
+      <h2>Food &amp; Beverage</h2>
+    </a>
+    <a class="card" href="contact.html">
+      <div class="card-icon">✉️</div>
+      <h2>Contact Me</h2>
+    </a>
+  </section>
+
+  <footer>© 2026 NZB Consulting. All rights reserved.</footer>
+
+</body>
+</html>

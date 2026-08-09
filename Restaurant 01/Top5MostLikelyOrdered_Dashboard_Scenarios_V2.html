@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top 5 Most Likely Ordered — Scenario Dashboard V2 | NZB Consulting</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  .back-nav {
+    background: #293241;
+    padding: 7px 32px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Comfortaa', sans-serif;
+  }
+  .back-nav a { color: #98C1D9; font-size: 12px; text-decoration: none; }
+  .back-nav a:hover { color: #E0FBFC; }
+  .back-nav .sep { color: #5A6A8A; font-size: 12px; }
+  .header-logo {
+    width: 48px; height: 48px;
+    background: #202020;
+    border: 1px solid #444;
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .header-logo img { width: 40px; height: 40px; object-fit: contain; }
+</style>
+<style>
+  /* ── NZB Midnight Blues ── */
+  :root {
+    --navy:      #1F3864;
+    --mid-blue:  #2F5597;
+    --accent:    #4472C4;
+    --light-blue:#BDD7EE;
+    --gold:      #FFD700;
+    --white:     #FFFFFF;
+    --off-white: #F5F8FC;
+    --text:      #1A1A2E;
+    --muted:     #5A6A8A;
+    --border:    #C5D3E8;
+    --green-bg:  #E2EFDA;
+    --green-txt: #375623;
+    --red-bg:    #FCE4D6;
+    --red-txt:   #843C0C;
+    --amber-bg:  #FFF3CD;
+    --amber-txt: #856404;
+    --row-alt:   #EBF3FB;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 20px 32px 16px;
+    border-bottom: 4px solid var(--gold);
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .header-brand {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--light-blue);
+    margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .header-subtitle {
+    font-size: 13px;
+    color: var(--light-blue);
+    margin-top: 4px;
+  }
+  .header-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--light-blue);
+    line-height: 1.7;
+  }
+
+  /* ── Main tab bar ── */
+  .main-tab-bar {
+    background: var(--mid-blue);
+    display: flex;
+    padding: 0 32px;
+    overflow-x: auto;
+  }
+  .main-tab {
+    padding: 13px 22px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--light-blue);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+  .main-tab:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .main-tab.active {
+    color: var(--white);
+    border-bottom: 3px solid var(--gold);
+    background: rgba(255,255,255,0.12);
+  }
+
+  /* ── Content area ── */
+  .content-area { padding: 28px 32px; max-width: 1280px; margin: 0 auto; }
+
+  /* ── Section heading ── */
+  .section-heading {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .section-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* ── Sub-tab bar ── */
+  .sub-tab-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .sub-tab {
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--mid-blue);
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .sub-tab:hover { background: var(--light-blue); border-color: var(--accent); }
+  .sub-tab.active {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+  }
+
+  /* ── Scenario selector buttons ── */
+  .scenario-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .scenario-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+  .scen-btn {
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid;
+    transition: all 0.18s;
+  }
+  .scen-btn.q2base  { border-color: var(--mid-blue); color: var(--mid-blue); background: var(--white); }
+  .scen-btn.blq3    { border-color: #375623; color: #375623; background: var(--white); }
+  .scen-btn.blq4    { border-color: #0C5460; color: #0C5460; background: var(--white); }
+  .scen-btn.hoq3    { border-color: #843C0C; color: #843C0C; background: var(--white); }
+  .scen-btn.hoq4    { border-color: #6B4226; color: #6B4226; background: var(--white); }
+
+  .scen-btn.q2base.active  { background: var(--mid-blue); color: var(--white); }
+  .scen-btn.blq3.active    { background: #375623; color: var(--white); }
+  .scen-btn.blq4.active    { background: #0C5460; color: var(--white); }
+  .scen-btn.hoq3.active    { background: #843C0C; color: var(--white); }
+  .scen-btn.hoq4.active    { background: #6B4226; color: var(--white); }
+
+  /* ── Two-column layout ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── Three-column KPI row ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 860px) { .kpi-row { grid-template-columns: repeat(2,1fr); } }
+  .kpi-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 6px rgba(31,56,100,0.07);
+    border-top: 3px solid var(--accent);
+  }
+  .kpi-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: var(--navy); }
+  .kpi-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .kpi-delta { font-size: 11px; font-weight: 700; margin-top: 4px; }
+  .delta-pos { color: #375623; }
+  .delta-neg { color: #843C0C; }
+
+  /* ── Chart card ── */
+  .chart-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px;
+    box-shadow: 0 2px 6px rgba(31,56,100,0.07);
+  }
+  .chart-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .chart-wrap { position: relative; height: 260px; }
+  .chart-wrap-tall { position: relative; height: 310px; }
+
+  /* ── Tables ── */
+  .table-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(31,56,100,0.07);
+  }
+  .table-card-title {
+    background: var(--navy);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 14px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  thead th {
+    background: var(--mid-blue);
+    color: var(--white);
+    padding: 9px 12px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    white-space: nowrap;
+  }
+  thead th:first-child { text-align: left; }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tbody tr:nth-child(odd)  { background: var(--white); }
+  tbody tr:hover { background: var(--light-blue); }
+  tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+  tbody td:first-child { text-align: left; font-weight: 700; }
+  tbody td:last-child { border-right: none; }
+  thead th:last-child { border-right: none; }
+
+  /* ── Rank badge ── */
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 12px;
+    background: var(--navy);
+    color: var(--white);
+  }
+  .rank-badge.r1 { background: var(--gold); color: var(--navy); }
+  .rank-badge.r2 { background: #B0BEC5; color: var(--navy); }
+  .rank-badge.r3 { background: #CD7F32; color: var(--white); }
+
+  /* ── Trend pill ── */
+  .trend-pos {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green-txt);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .trend-neg {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red-txt);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ── Category pill ── */
+  .cat { display: inline-block; border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+  .cat-american { background: #FFF3CD; color: #856404; }
+  .cat-asian    { background: #D1ECF1; color: #0C5460; }
+  .cat-mexican  { background: #F8D7DA; color: #721C24; }
+  .cat-italian  { background: #D4EDDA; color: #155724; }
+
+  /* ── Scenario badge ── */
+  .scen-badge {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 2px 9px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .sb-q2base { background: #DBEAFE; color: #1D4ED8; }
+  .sb-blq3   { background: var(--green-bg); color: var(--green-txt); }
+  .sb-blq4   { background: #D1ECF1; color: #0C5460; }
+  .sb-hoq3   { background: var(--red-bg); color: var(--red-txt); }
+  .sb-hoq4   { background: var(--amber-bg); color: var(--amber-txt); }
+
+  /* ── Callout box ── */
+  .callout {
+    background: #EEF4FC;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--text);
+    margin-top: 18px;
+    line-height: 1.6;
+  }
+  .callout strong { color: var(--navy); }
+
+  /* ── Two sub-tables side by side ── */
+  .sub-tables {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 760px) { .sub-tables { grid-template-columns: 1fr; } }
+
+  /* ── Scenario comparison table ── */
+  .scen-table-wrap { overflow-x: auto; margin-bottom: 22px; }
+
+  /* ── Divider ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  /* ── Footer ── */
+  .page-footer {
+    background: var(--navy);
+    color: var(--light-blue);
+    font-size: 10.5px;
+    text-align: center;
+    padding: 12px 32px;
+    margin-top: 40px;
+    line-height: 1.6;
+  }
+
+  /* hidden panels */
+  .tab-panel  { display: none; }
+  .tab-panel.active { display: block; }
+  .sub-panel  { display: none; }
+  .sub-panel.active { display: block; }
+  .scen-rolling-panel { display: none; }
+  .scen-rolling-panel.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     PAGE HEADER
+════════════════════════════════════════════════ -->
+<div class="page-header">
+  <div class="header-top">
+    <div>
+      <div class="header-brand">NZB Consulting &nbsp;|&nbsp; Restaurant Client</div>
+      <div class="header-title">Top 5 Most Likely Ordered Menu Items — Scenario Dashboard</div>
+      <div class="header-subtitle">Q2 2023 Forecast &amp; Metro Manila (NCR) Consumption Growth Scenarios &nbsp;|&nbsp; Based on Q1 2023 order data (12,218 records)</div>
+    </div>
+    <div style="display:flex; align-items:flex-start; gap:16px;">
+      <div class="header-meta">
+        Prepared by: NZB Consulting<br>
+        Date: 8 August 2026<br>
+        Version: 2.0 &nbsp;|&nbsp; Final
+      </div>
+      <div class="header-logo">
+        <img src="../NZB_Logo_001.png" alt="NZB Consulting" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ BACK NAV ════════════════════════ -->
+<div class="back-nav">
+  <a href="index.html">← Back to Restaurant Main Page</a>
+  <span class="sep">|</span>
+  <a href="../index.html">Home</a>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     MAIN TAB BAR
+════════════════════════════════════════════════ -->
+<div class="main-tab-bar">
+  <div class="main-tab active" onclick="showMain('q2')">Top 5: Q2 2023 Forecast</div>
+  <div class="main-tab" onclick="showMain('scenarios')">Scenario Comparison</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     CONTENT AREA
+════════════════════════════════════════════════ -->
+<div class="content-area">
+
+<!-- ══════════════════════════════════════════════
+     MAIN TAB 1 — Q2 FORECAST
+══════════════════════════════════════════════ -->
+<div id="panel-q2" class="tab-panel active">
+
+  <div class="section-heading">Top 5 Most Likely Ordered Items: April to June 2023</div>
+  <div class="section-sub">Linear trend extrapolation from Q1 2023 actuals (January–March). Ranked by total forecast order volume across Q2 2023. Data corrected: French Fries Q2 = 635; Mac &amp; Cheese monthly figures corrected (Jan 138, Feb 154) per source data.</div>
+
+  <!-- Q2 Forecast: table + chart -->
+  <div class="two-col">
+    <div class="table-card">
+      <div class="table-card-title">Q2 2023 Forecast by Item</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th><th>Item</th><th>Category</th><th>Q1 Total</th><th>Trend Slope</th><th>Apr</th><th>May</th><th>Jun</th><th>Q2 Total</th><th>Q1→Q2 Growth</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-q2"></tbody>
+      </table>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Q2 2023 Forecast — Monthly Order Volume</div>
+      <div class="chart-wrap"><canvas id="chart-q2"></canvas></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>French Fries vs Mac &amp; Cheese:</strong> Both share a near-identical Q2 forecast (635 vs 634 units). French Fries holds 3rd on a higher April forecast (205 vs 193). Mac &amp; Cheese carries the steepest positive trend slope (+18.5 units/month) and is projected to surpass French Fries in June (230 vs 218 units).
+    &nbsp;&nbsp;<strong>Edamame note:</strong> Edamame was the 2nd most-ordered item in Q1 (625 units) but is excluded from the Top 5. Its declining trend (−26.5 units/month) puts its Q2 forecast at 386 units (rank 13).
+    &nbsp;&nbsp;<strong>Mac &amp; Cheese correction:</strong> Monthly Q1 figures corrected from v3 report (Jan 147, Feb 145 → Jan 138, Feb 154 per source data). Q1 total of 467 unchanged.
+  </div>
+
+  <!-- ─── ROLLING 2-WEEK SUB-TABS ─── -->
+  <div style="margin-top:32px;">
+    <div class="section-heading" style="margin-bottom:14px;">Rolling 2-Week Forecast — April to June 2023 (Q2 Base)</div>
+    <div class="sub-tab-bar">
+      <div class="sub-tab active" onclick="showSub('apr')">April 2023</div>
+      <div class="sub-tab" onclick="showSub('may')">May 2023</div>
+      <div class="sub-tab" onclick="showSub('jun')">June 2023</div>
+    </div>
+
+    <!-- APRIL -->
+    <div id="sub-apr" class="sub-panel active">
+      <div class="section-sub" style="margin-bottom:16px;">Window 1: 1–14 Apr (14 days) &nbsp;|&nbsp; Window 2: 15–30 Apr (16 days)</div>
+      <div class="sub-tables">
+        <div class="table-card">
+          <div class="table-card-title">April Window 1 — 1 to 14 April (14 days)</div>
+          <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+          <tbody id="tbody-apr1"></tbody></table>
+        </div>
+        <div class="table-card">
+          <div class="table-card-title">April Window 2 — 15 to 30 April (16 days)</div>
+          <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+          <tbody id="tbody-apr2"></tbody></table>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">April — Window 1 vs Window 2</div>
+        <div class="chart-wrap"><canvas id="chart-apr"></canvas></div>
+      </div>
+      <div class="callout"><strong>April:</strong> Rank order is identical across both windows. Higher unit counts in Window 2 reflect the longer 16-day window (vs 14 days in Window 1), consistent with the proportional allocation formula.</div>
+    </div>
+
+    <!-- MAY -->
+    <div id="sub-may" class="sub-panel">
+      <div class="section-sub" style="margin-bottom:16px;">Window 1: 1–14 May (14 days) &nbsp;|&nbsp; Window 2: 15–31 May (17 days)</div>
+      <div class="sub-tables">
+        <div class="table-card">
+          <div class="table-card-title">May Window 1 — 1 to 14 May (14 days)</div>
+          <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+          <tbody id="tbody-may1"></tbody></table>
+        </div>
+        <div class="table-card">
+          <div class="table-card-title">May Window 2 — 15 to 31 May (17 days)</div>
+          <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+          <tbody id="tbody-may2"></tbody></table>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">May — Window 1 vs Window 2</div>
+        <div class="chart-wrap"><canvas id="chart-may"></canvas></div>
+      </div>
+      <div class="callout"><strong>May:</strong> Mac &amp; Cheese overtakes Tofu Pad Thai for 4th position from May onward, driven by its steeper trend slope. French Fries and Mac &amp; Cheese are effectively tied in Window 2 (116 vs 116). French Fries retains 3rd rank on its higher April forecast.</div>
+    </div>
+
+    <!-- JUNE -->
+    <div id="sub-jun" class="sub-panel">
+      <div class="section-sub" style="margin-bottom:16px;">Window 1: 1–14 Jun (14 days) &nbsp;|&nbsp; Window 2: 15–30 Jun (16 days)</div>
+      <div class="sub-tables">
+        <div class="table-card">
+          <div class="table-card-title">June Window 1 — 1 to 14 June (14 days)</div>
+          <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+          <tbody id="tbody-jun1"></tbody></table>
+        </div>
+        <div class="table-card">
+          <div class="table-card-title">June Window 2 — 15 to 30 June (16 days)</div>
+          <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+          <tbody id="tbody-jun2"></tbody></table>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">June — Window 1 vs Window 2</div>
+        <div class="chart-wrap"><canvas id="chart-jun"></canvas></div>
+      </div>
+      <div class="callout"><strong>June:</strong> Mac &amp; Cheese overtakes French Fries to claim 3rd, consistent with its +18.5 units/month trend slope — the steepest of any Top 5 item. Hamburger and Korean Beef Bowl are tied at 120 units in Window 1; Hamburger retains 1st on higher April and May forecasts.</div>
+    </div>
+
+  </div><!-- end rolling sub-tabs -->
+</div><!-- end panel-q2 -->
+
+
+<!-- ══════════════════════════════════════════════
+     MAIN TAB 2 — SCENARIO COMPARISON
+══════════════════════════════════════════════ -->
+<div id="panel-scenarios" class="tab-panel">
+
+  <div class="section-heading">Scenario Comparison — Metro Manila (NCR) Consumption Growth</div>
+  <div class="section-sub">Two macro scenarios (Baseline and High Oil) applied to the Q2 2023 base forecast, each with Q3 and Q4 variants. Growth rates are Metro Manila (NCR) household consumption growth projections. Formula: Scenario monthly = ROUND(Q2 base month × (1 + rate), 0).</div>
+
+  <!-- Scenario assumptions strip -->
+  <div class="kpi-row" style="margin-bottom:24px;">
+    <div class="kpi-card" style="border-top-color:var(--mid-blue);">
+      <div class="kpi-label">Q2 Base</div>
+      <div class="kpi-value" style="font-size:18px;">3,352</div>
+      <div class="kpi-sub">Combined Top 5 units</div>
+      <div class="kpi-delta" style="color:var(--muted);">Growth rate: —</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:#375623;">
+      <div class="kpi-label">Baseline Q3</div>
+      <div class="kpi-value" style="font-size:18px;">3,490</div>
+      <div class="kpi-sub">Combined Top 5 units</div>
+      <div class="kpi-delta delta-pos">↑ +138 vs Q2 Base (+4.1%)</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:#0C5460;">
+      <div class="kpi-label">Baseline Q4</div>
+      <div class="kpi-value" style="font-size:18px;">3,512</div>
+      <div class="kpi-sub">Combined Top 5 units</div>
+      <div class="kpi-delta delta-pos">↑ +160 vs Q2 Base (+4.8%)</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:#843C0C;">
+      <div class="kpi-label">High Oil Q3</div>
+      <div class="kpi-value" style="font-size:18px;">3,459</div>
+      <div class="kpi-sub">Combined Top 5 units</div>
+      <div class="kpi-delta delta-neg">↑ +107 vs Q2 Base (+3.2%)</div>
+    </div>
+  </div>
+  <div class="kpi-row" style="grid-template-columns: repeat(3,1fr); margin-bottom:28px;">
+    <div class="kpi-card" style="border-top-color:#6B4226;">
+      <div class="kpi-label">High Oil Q4</div>
+      <div class="kpi-value" style="font-size:18px;">3,484</div>
+      <div class="kpi-sub">Combined Top 5 units</div>
+      <div class="kpi-delta" style="color:var(--amber-txt);">↑ +132 vs Q2 Base (+4.0%)</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:var(--accent);">
+      <div class="kpi-label">Q3 Scenario Spread</div>
+      <div class="kpi-value" style="font-size:18px;">31 units</div>
+      <div class="kpi-sub">BL Q3 vs HO Q3 (Top 5 total)</div>
+      <div class="kpi-delta" style="color:var(--muted);">≈ 2.2 units / item / week</div>
+    </div>
+    <div class="kpi-card" style="border-top-color:var(--accent);">
+      <div class="kpi-label">Q4 Scenario Spread</div>
+      <div class="kpi-value" style="font-size:18px;">28 units</div>
+      <div class="kpi-sub">BL Q4 vs HO Q4 (Top 5 total)</div>
+      <div class="kpi-delta" style="color:var(--muted);">Limited procurement risk</div>
+    </div>
+  </div>
+
+  <!-- Scenario comparison chart -->
+  <div class="chart-card" style="margin-bottom:24px;">
+    <div class="chart-title">Top 5 Items — Quarterly Total by Scenario</div>
+    <div class="chart-wrap-tall"><canvas id="chart-scen-compare"></canvas></div>
+  </div>
+
+  <div class="callout">
+    <strong>Scenario spread is narrow:</strong> The 31-unit Q3 spread across all 5 items represents approximately 2.2 units per item per week — a marginal difference. From a procurement standpoint, the High Oil Q3 scenario requires only slightly lower stock positioning than the Baseline. &nbsp;&nbsp;<strong>Q4 outperforms Q3</strong> under both scenarios: Baseline Q4 adds 22 units above Baseline Q3 (3,512 vs 3,490); High Oil Q4 adds 25 units above High Oil Q3 (3,484 vs 3,459), driven by seasonal remittance inflows and year-end demand patterns. &nbsp;&nbsp;<strong>Hamburger</strong> leads and retains first rank across all four scenarios.
+  </div>
+
+  <hr class="divider">
+
+  <!-- 3.1 Scenario table: quarterly totals -->
+  <div class="section-heading" style="margin-top:0;">3.1 Quarterly Totals by Scenario</div>
+  <div class="section-sub">All figures in units. BL = Baseline; HO = High Oil. Q3 rate applied to April–June base; Q4 is a distinct forward quarter, not a compounding of Q3.</div>
+
+  <div class="scen-table-wrap">
+    <div class="table-card">
+      <div class="table-card-title">Top 5 Items — Scenario Comparison by Quarterly Total (units)</div>
+      <table id="tbl-scen-qtotals">
+        <thead>
+          <tr>
+            <th rowspan="2">Rank</th>
+            <th rowspan="2">Item</th>
+            <th rowspan="2">Category</th>
+            <th colspan="4">Q2 Base</th>
+            <th colspan="4">Baseline Q3 (4.1%)</th>
+            <th colspan="4">Baseline Q4 (4.8%)</th>
+            <th colspan="4">High Oil Q3 (3.2%)</th>
+            <th colspan="4">High Oil Q4 (4.0%)</th>
+          </tr>
+          <tr>
+            <th>Apr</th><th>May</th><th>Jun</th><th>Total</th>
+            <th>Apr</th><th>May</th><th>Jun</th><th>Total</th>
+            <th>Apr</th><th>May</th><th>Jun</th><th>Total</th>
+            <th>Apr</th><th>May</th><th>Jun</th><th>Total</th>
+            <th>Apr</th><th>May</th><th>Jun</th><th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-scen-qtotals"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 3.2 Rolling 2-week scenario windows -->
+  <div class="section-heading" style="margin-top:0;">3.2 Rolling 2-Week Windows by Scenario</div>
+  <div class="section-sub">Select scenario below, then browse by month. Window formula: ROUND(scenario monthly × window days ÷ month days, 0). Window 2 consistently exceeds Window 1 by ~15% due to the higher day count in the second half of each month.</div>
+
+  <!-- Scenario selector -->
+  <div class="scenario-bar">
+    <span class="scenario-label">Scenario:</span>
+    <button class="scen-btn q2base active" onclick="selectScen('q2base')">Q2 Base</button>
+    <button class="scen-btn blq3"   onclick="selectScen('blq3')">Baseline Q3</button>
+    <button class="scen-btn blq4"   onclick="selectScen('blq4')">Baseline Q4</button>
+    <button class="scen-btn hoq3"   onclick="selectScen('hoq3')">High Oil Q3</button>
+    <button class="scen-btn hoq4"   onclick="selectScen('hoq4')">High Oil Q4</button>
+  </div>
+
+  <!-- Month sub-tabs (shared across scenario panels) -->
+  <div class="sub-tab-bar">
+    <div class="sub-tab active" id="stab-apr" onclick="showScenMonth('apr')">April 2023</div>
+    <div class="sub-tab" id="stab-may" onclick="showScenMonth('may')">May 2023</div>
+    <div class="sub-tab" id="stab-jun" onclick="showScenMonth('jun')">June 2023</div>
+  </div>
+
+  <!-- APRIL rolling panel -->
+  <div id="scen-month-apr" class="scen-rolling-panel active">
+    <div class="section-sub" style="margin-bottom:16px;" id="scen-apr-label">Window 1: 1–14 Apr (14 days) &nbsp;|&nbsp; Window 2: 15–30 Apr (16 days)</div>
+    <div class="sub-tables">
+      <div class="table-card">
+        <div class="table-card-title" id="title-apr-w1">April Window 1 — 1 to 14 April (14 days)</div>
+        <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+        <tbody id="tbody-scen-apr1"></tbody></table>
+      </div>
+      <div class="table-card">
+        <div class="table-card-title" id="title-apr-w2">April Window 2 — 15 to 30 April (16 days)</div>
+        <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+        <tbody id="tbody-scen-apr2"></tbody></table>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title" id="chart-scen-apr-title">April — Window 1 vs Window 2</div>
+      <div class="chart-wrap"><canvas id="chart-scen-apr"></canvas></div>
+    </div>
+  </div>
+
+  <!-- MAY rolling panel -->
+  <div id="scen-month-may" class="scen-rolling-panel">
+    <div class="section-sub" style="margin-bottom:16px;">Window 1: 1–14 May (14 days) &nbsp;|&nbsp; Window 2: 15–31 May (17 days)</div>
+    <div class="sub-tables">
+      <div class="table-card">
+        <div class="table-card-title" id="title-may-w1">May Window 1 — 1 to 14 May (14 days)</div>
+        <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+        <tbody id="tbody-scen-may1"></tbody></table>
+      </div>
+      <div class="table-card">
+        <div class="table-card-title" id="title-may-w2">May Window 2 — 15 to 31 May (17 days)</div>
+        <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+        <tbody id="tbody-scen-may2"></tbody></table>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title" id="chart-scen-may-title">May — Window 1 vs Window 2</div>
+      <div class="chart-wrap"><canvas id="chart-scen-may"></canvas></div>
+    </div>
+  </div>
+
+  <!-- JUNE rolling panel -->
+  <div id="scen-month-jun" class="scen-rolling-panel">
+    <div class="section-sub" style="margin-bottom:16px;">Window 1: 1–14 Jun (14 days) &nbsp;|&nbsp; Window 2: 15–30 Jun (16 days)</div>
+    <div class="sub-tables">
+      <div class="table-card">
+        <div class="table-card-title" id="title-jun-w1">June Window 1 — 1 to 14 June (14 days)</div>
+        <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+        <tbody id="tbody-scen-jun1"></tbody></table>
+      </div>
+      <div class="table-card">
+        <div class="table-card-title" id="title-jun-w2">June Window 2 — 15 to 30 June (16 days)</div>
+        <table><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th>Forecast Units</th></tr></thead>
+        <tbody id="tbody-scen-jun2"></tbody></table>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title" id="chart-scen-jun-title">June — Window 1 vs Window 2</div>
+      <div class="chart-wrap"><canvas id="chart-scen-jun"></canvas></div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:20px;">
+    <strong>Window 2 consistently exceeds Window 1 by ~15%</strong> across all items and scenarios — a direct function of day count (Window 2 has 16–17 days vs Window 1's 14). <strong>Peak window:</strong> Hamburger, Baseline Q3, May Window 2 = 140 units (8.2 units/day). The scenario selector above shows that rolling window differences between Baseline and High Oil are small: typically 2–3 units per item per window.
+  </div>
+
+</div><!-- end panel-scenarios -->
+
+</div><!-- end content-area -->
+
+<!-- ════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+<div class="page-footer">
+  NZB Consulting &nbsp;|&nbsp; Restaurant Client &nbsp;|&nbsp; Top 5 Most Likely Ordered Items — Scenario Dashboard &nbsp;|&nbsp; Prepared 8 August 2026 &nbsp;|&nbsp; Version 2.0 Final<br>
+  Source: order_details.xlsx (Q1 2023, 12,218 valid records) &nbsp;|&nbsp; Scenarios: Metro Manila (NCR) household consumption growth projections &nbsp;|&nbsp; Methodology: Linear trend extrapolation + proportional window allocation. Refer to Restaurant_Q1_2023_Analysis_Scenarios.docx for full methodology.
+</div>
+
+<!-- ════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════ -->
+<script>
+// ── NZB colour palette ──
+const NZB = {
+  navy:   '#1F3864',
+  mid:    '#2F5597',
+  accent: '#4472C4',
+  light:  '#BDD7EE',
+  gold:   '#FFD700',
+  green:  '#70AD47',
+  orange: '#ED7D31',
+  teal:   '#17BECF',
+  purple: '#9467BD',
+  red:    '#C00000',
+};
+
+const ITEMS = ['Hamburger','Korean Beef Bowl','French Fries','Mac & Cheese','Tofu Pad Thai'];
+const CATS  = ['American','Asian','American','American','Asian'];
+
+// ── Q2 Base forecast ──
+const q2Data = [
+  { rank:1, item:'Hamburger',        cat:'American', q1:629, slope:+12.0,  apr:234, may:246, jun:258, q2:738,  growth:0.1733 },
+  { rank:2, item:'Korean Beef Bowl', cat:'Asian',    q1:592, slope:+15.0,  apr:227, may:242, jun:257, q2:726,  growth:0.2264 },
+  { rank:3, item:'French Fries',     cat:'American', q1:576, slope:+6.5,   apr:205, may:212, jun:218, q2:635,  growth:0.1024 },
+  { rank:4, item:'Mac & Cheese',     cat:'American', q1:467, slope:+18.5,  apr:193, may:211, jun:230, q2:634,  growth:0.3576 },
+  { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    q1:569, slope:+5.5,   apr:201, may:206, jun:212, q2:619,  growth:0.0879 },
+];
+
+// ── Rolling windows Q2 Base ──
+const rollingBase = {
+  apr: [
+    { rank:1, item:'Hamburger',        cat:'American', w1:109, w2:125 },
+    { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:106, w2:121 },
+    { rank:3, item:'French Fries',     cat:'American', w1:96,  w2:109 },
+    { rank:4, item:'Tofu Pad Thai',    cat:'Asian',    w1:94,  w2:107 },
+    { rank:5, item:'Mac & Cheese',     cat:'American', w1:90,  w2:103 },
+  ],
+  may: [
+    { rank:1, item:'Hamburger',        cat:'American', w1:111, w2:135 },
+    { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:109, w2:133 },
+    { rank:3, item:'French Fries',     cat:'American', w1:96,  w2:116 },
+    { rank:4, item:'Mac & Cheese',     cat:'American', w1:95,  w2:116 },
+    { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:93,  w2:113 },
+  ],
+  jun: [
+    { rank:1, item:'Hamburger',        cat:'American', w1:120, w2:138 },
+    { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:120, w2:137 },
+    { rank:3, item:'Mac & Cheese',     cat:'American', w1:107, w2:123 },
+    { rank:4, item:'French Fries',     cat:'American', w1:102, w2:116 },
+    { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:99,  w2:113 },
+  ],
+};
+
+// ── Scenario quarterly data (from Top5 Scenario Summary) ──
+const scenarioData = {
+  q2base: {
+    label: 'Q2 Base', rate: '—', badgeClass: 'sb-q2base',
+    items: [
+      { rank:1, item:'Hamburger',        cat:'American', apr:234, may:246, jun:258, total:738 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    apr:227, may:242, jun:257, total:726 },
+      { rank:3, item:'French Fries',     cat:'American', apr:205, may:212, jun:218, total:635 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', apr:193, may:211, jun:230, total:634 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    apr:201, may:206, jun:212, total:619 },
+    ]
+  },
+  blq3: {
+    label: 'Baseline Q3', rate: '4.1%', badgeClass: 'sb-blq3',
+    items: [
+      { rank:1, item:'Hamburger',        cat:'American', apr:244, may:256, jun:269, total:769 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    apr:236, may:252, jun:268, total:756 },
+      { rank:3, item:'French Fries',     cat:'American', apr:213, may:221, jun:227, total:661 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', apr:201, may:220, jun:239, total:660 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    apr:209, may:214, jun:221, total:644 },
+    ]
+  },
+  blq4: {
+    label: 'Baseline Q4', rate: '4.8%', badgeClass: 'sb-blq4',
+    items: [
+      { rank:1, item:'Hamburger',        cat:'American', apr:245, may:258, jun:270, total:773 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    apr:238, may:254, jun:269, total:761 },
+      { rank:3, item:'French Fries',     cat:'American', apr:215, may:222, jun:228, total:665 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', apr:202, may:221, jun:241, total:664 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    apr:211, may:216, jun:222, total:649 },
+    ]
+  },
+  hoq3: {
+    label: 'High Oil Q3', rate: '3.2%', badgeClass: 'sb-hoq3',
+    items: [
+      { rank:1, item:'Hamburger',        cat:'American', apr:241, may:254, jun:266, total:761 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    apr:234, may:250, jun:265, total:749 },
+      { rank:3, item:'French Fries',     cat:'American', apr:212, may:219, jun:225, total:656 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', apr:199, may:218, jun:237, total:654 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    apr:207, may:213, jun:219, total:639 },
+    ]
+  },
+  hoq4: {
+    label: 'High Oil Q4', rate: '4.0%', badgeClass: 'sb-hoq4',
+    items: [
+      { rank:1, item:'Hamburger',        cat:'American', apr:243, may:256, jun:268, total:767 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    apr:236, may:252, jun:267, total:755 },
+      { rank:3, item:'French Fries',     cat:'American', apr:213, may:220, jun:227, total:660 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', apr:201, may:219, jun:239, total:659 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    apr:209, may:214, jun:220, total:643 },
+    ]
+  },
+};
+
+// ── Scenario rolling 2-week data (from Top5 Scenario Summary rolling section) ──
+const scenRolling = {
+  q2base: {
+    apr: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:109, w2:125 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:106, w2:121 },
+      { rank:3, item:'French Fries',     cat:'American', w1:96,  w2:109 },
+      { rank:4, item:'Tofu Pad Thai',    cat:'Asian',    w1:94,  w2:107 },
+      { rank:5, item:'Mac & Cheese',     cat:'American', w1:90,  w2:103 },
+    ],
+    may: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:111, w2:135 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:109, w2:133 },
+      { rank:3, item:'French Fries',     cat:'American', w1:96,  w2:116 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', w1:95,  w2:116 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:93,  w2:113 },
+    ],
+    jun: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:120, w2:138 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:120, w2:137 },
+      { rank:3, item:'Mac & Cheese',     cat:'American', w1:107, w2:123 },
+      { rank:4, item:'French Fries',     cat:'American', w1:102, w2:116 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:99,  w2:113 },
+    ],
+  },
+  blq3: {
+    apr: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:114, w2:130 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:110, w2:126 },
+      { rank:3, item:'French Fries',     cat:'American', w1:99,  w2:114 },
+      { rank:4, item:'Tofu Pad Thai',    cat:'Asian',    w1:98,  w2:111 },
+      { rank:5, item:'Mac & Cheese',     cat:'American', w1:94,  w2:107 },
+    ],
+    may: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:116, w2:140 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:114, w2:138 },
+      { rank:3, item:'French Fries',     cat:'American', w1:100, w2:121 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', w1:99,  w2:121 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:97,  w2:117 },
+    ],
+    jun: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:126, w2:143 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:125, w2:143 },
+      { rank:3, item:'Mac & Cheese',     cat:'American', w1:112, w2:127 },
+      { rank:4, item:'French Fries',     cat:'American', w1:106, w2:121 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:103, w2:118 },
+    ],
+  },
+  blq4: {
+    apr: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:114, w2:131 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:111, w2:127 },
+      { rank:3, item:'French Fries',     cat:'American', w1:100, w2:115 },
+      { rank:4, item:'Tofu Pad Thai',    cat:'Asian',    w1:98,  w2:113 },
+      { rank:5, item:'Mac & Cheese',     cat:'American', w1:94,  w2:108 },
+    ],
+    may: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:117, w2:141 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:115, w2:139 },
+      { rank:3, item:'French Fries',     cat:'American', w1:100, w2:122 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', w1:100, w2:121 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:98,  w2:118 },
+    ],
+    jun: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:126, w2:144 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:126, w2:143 },
+      { rank:3, item:'Mac & Cheese',     cat:'American', w1:112, w2:129 },
+      { rank:4, item:'French Fries',     cat:'American', w1:106, w2:122 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:104, w2:118 },
+    ],
+  },
+  hoq3: {
+    apr: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:112, w2:129 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:109, w2:125 },
+      { rank:3, item:'French Fries',     cat:'American', w1:99,  w2:113 },
+      { rank:4, item:'Tofu Pad Thai',    cat:'Asian',    w1:97,  w2:110 },
+      { rank:5, item:'Mac & Cheese',     cat:'American', w1:93,  w2:106 },
+    ],
+    may: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:115, w2:139 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:113, w2:137 },
+      { rank:3, item:'French Fries',     cat:'American', w1:99,  w2:120 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', w1:98,  w2:120 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:96,  w2:117 },
+    ],
+    jun: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:124, w2:142 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:124, w2:141 },
+      { rank:3, item:'Mac & Cheese',     cat:'American', w1:111, w2:126 },
+      { rank:4, item:'French Fries',     cat:'American', w1:105, w2:120 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:102, w2:117 },
+    ],
+  },
+  hoq4: {
+    apr: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:113, w2:130 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:110, w2:126 },
+      { rank:3, item:'French Fries',     cat:'American', w1:99,  w2:114 },
+      { rank:4, item:'Tofu Pad Thai',    cat:'Asian',    w1:98,  w2:111 },
+      { rank:5, item:'Mac & Cheese',     cat:'American', w1:94,  w2:107 },
+    ],
+    may: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:116, w2:140 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:114, w2:138 },
+      { rank:3, item:'French Fries',     cat:'American', w1:99,  w2:121 },
+      { rank:4, item:'Mac & Cheese',     cat:'American', w1:99,  w2:120 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:97,  w2:117 },
+    ],
+    jun: [
+      { rank:1, item:'Hamburger',        cat:'American', w1:125, w2:143 },
+      { rank:2, item:'Korean Beef Bowl', cat:'Asian',    w1:125, w2:142 },
+      { rank:3, item:'Mac & Cheese',     cat:'American', w1:112, w2:127 },
+      { rank:4, item:'French Fries',     cat:'American', w1:106, w2:121 },
+      { rank:5, item:'Tofu Pad Thai',    cat:'Asian',    w1:103, w2:117 },
+    ],
+  },
+};
+
+// ── Chart registry for destruction ──
+const chartRegistry = {};
+function destroyChart(id) {
+  if (chartRegistry[id]) { chartRegistry[id].destroy(); delete chartRegistry[id]; }
+}
+
+// ── Helpers ──
+function rankBadge(r) {
+  const cls = r === 1 ? 'r1' : r === 2 ? 'r2' : r === 3 ? 'r3' : '';
+  return `<span class="rank-badge ${cls}">${r}</span>`;
+}
+function catPill(cat) {
+  const cls = cat === 'American' ? 'cat-american' : cat === 'Asian' ? 'cat-asian' : cat === 'Mexican' ? 'cat-mexican' : 'cat-italian';
+  return `<span class="cat ${cls}">${cat}</span>`;
+}
+function trendPill(slope) {
+  const sign = slope >= 0 ? '+' : '';
+  const cls  = slope >= 0 ? 'trend-pos' : 'trend-neg';
+  return `<span class="${cls}">${sign}${slope}</span>`;
+}
+function pct(v) { return (v * 100).toFixed(1) + '%'; }
+
+const ITEM_COLORS = [NZB.navy, NZB.accent, NZB.green, NZB.orange, NZB.teal];
+
+// ════════════════════════════
+// TAB 1: Q2 FORECAST
+// ════════════════════════════
+function buildQ2Table() {
+  const tb = document.getElementById('tbody-q2');
+  tb.innerHTML = q2Data.map(d => `
+    <tr>
+      <td>${rankBadge(d.rank)}</td>
+      <td>${d.item}</td>
+      <td>${catPill(d.cat)}</td>
+      <td>${d.q1}</td>
+      <td>${trendPill(d.slope)}</td>
+      <td>${d.apr}</td>
+      <td>${d.may}</td>
+      <td>${d.jun}</td>
+      <td><strong>${d.q2}</strong></td>
+      <td><span class="trend-pos">${pct(d.growth)}</span></td>
+    </tr>`).join('');
+}
+
+function buildQ2Chart() {
+  destroyChart('chart-q2');
+  const ctx = document.getElementById('chart-q2').getContext('2d');
+  chartRegistry['chart-q2'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['April','May','June'],
+      datasets: q2Data.map((d, i) => ({
+        label: d.item,
+        data: [d.apr, d.may, d.jun],
+        backgroundColor: ITEM_COLORS[i] + 'CC',
+        borderColor: ITEM_COLORS[i],
+        borderWidth: 1.5,
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 14 } } },
+      scales: {
+        x: { grid: { color: '#E0E9F5' }, ticks: { font: { size: 11 } } },
+        y: { grid: { color: '#E0E9F5' }, ticks: { font: { size: 11 } }, title: { display: true, text: 'Forecast Units', font: { size: 11 }, color: NZB.navy } }
+      }
+    }
+  });
+}
+
+// Rolling window builder for Q2 Base tab
+function buildRollingTable(tbId, rows, wKey) {
+  document.getElementById(tbId).innerHTML = rows.map(d => `
+    <tr>
+      <td>${rankBadge(d.rank)}</td>
+      <td>${d.item}</td>
+      <td>${catPill(d.cat)}</td>
+      <td><strong>${d[wKey]}</strong></td>
+    </tr>`).join('');
+}
+
+function buildRollingChart(canvasId, rows, month) {
+  destroyChart(canvasId);
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  chartRegistry[canvasId] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: rows.map(d => d.item),
+      datasets: [
+        { label: `${month} Window 1`, data: rows.map(d => d.w1), backgroundColor: NZB.mid + 'CC', borderColor: NZB.mid, borderWidth: 1.5 },
+        { label: `${month} Window 2`, data: rows.map(d => d.w2), backgroundColor: NZB.accent + 'CC', borderColor: NZB.accent, borderWidth: 1.5 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 14 } } },
+      scales: {
+        x: { grid: { color: '#E0E9F5' }, ticks: { font: { size: 11 } } },
+        y: { grid: { color: '#E0E9F5' }, ticks: { font: { size: 11 } }, title: { display: true, text: 'Forecast Units', font: { size: 11 }, color: NZB.navy }, beginAtZero: false, suggestedMin: 70 }
+      }
+    }
+  });
+}
+
+// ════════════════════════════
+// TAB 2: SCENARIO COMPARISON
+// ════════════════════════════
+
+// KPI totals are already hardcoded in HTML above.
+
+function buildScenCompareChart() {
+  destroyChart('chart-scen-compare');
+  const ctx = document.getElementById('chart-scen-compare').getContext('2d');
+  const scenKeys  = ['q2base','blq3','blq4','hoq3','hoq4'];
+  const scenLabels = ['Q2 Base','BL Q3 (4.1%)','BL Q4 (4.8%)','HO Q3 (3.2%)','HO Q4 (4.0%)'];
+  const barColors  = [NZB.mid, '#375623', '#0C5460', '#843C0C', '#6B4226'];
+
+  chartRegistry['chart-scen-compare'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ITEMS,
+      datasets: scenKeys.map((k, i) => ({
+        label: scenLabels[i],
+        data: scenarioData[k].items.map(d => d.total),
+        backgroundColor: barColors[i] + 'CC',
+        borderColor: barColors[i],
+        borderWidth: 1.5,
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 14 } } },
+      scales: {
+        x: { grid: { color: '#E0E9F5' }, ticks: { font: { size: 11 } } },
+        y: { grid: { color: '#E0E9F5' }, ticks: { font: { size: 11 } }, title: { display: true, text: 'Q2 Forecast Units (Total)', font: { size: 11 }, color: NZB.navy }, suggestedMin: 550 }
+      }
+    }
+  });
+}
+
+function buildScenQtotalsTable() {
+  const tb = document.getElementById('tbody-scen-qtotals');
+  const keys = ['q2base','blq3','blq4','hoq3','hoq4'];
+  tb.innerHTML = [0,1,2,3,4].map(i => {
+    const base = scenarioData.q2base.items[i];
+    const cells = keys.map(k => {
+      const d = scenarioData[k].items[i];
+      const isBase = k === 'q2base';
+      const totalStyle = isBase ? '' : '';
+      return `<td>${d.apr}</td><td>${d.may}</td><td>${d.jun}</td><td><strong>${d.total}</strong></td>`;
+    }).join('');
+    return `<tr>
+      <td>${rankBadge(base.rank)}</td>
+      <td>${base.item}</td>
+      <td>${catPill(base.cat)}</td>
+      ${cells}
+    </tr>`;
+  }).join('');
+}
+
+// ── Scenario rolling windows ──
+let activeScen = 'q2base';
+let activeScenMonth = 'apr';
+
+function selectScen(key) {
+  activeScen = key;
+  // update button states
+  document.querySelectorAll('.scen-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderScenRolling();
+}
+
+function showScenMonth(month) {
+  activeScenMonth = month;
+  document.querySelectorAll('.scen-rolling-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('scen-month-' + month).classList.add('active');
+  document.querySelectorAll('#stab-apr, #stab-may, #stab-jun').forEach(t => t.classList.remove('active'));
+  document.getElementById('stab-' + month).classList.add('active');
+  renderScenRolling();
+}
+
+function renderScenRolling() {
+  const sData = scenarioData[activeScen];
+  const rData = scenRolling[activeScen];
+  const label = sData.label;
+
+  ['apr','may','jun'].forEach(month => {
+    const rows = rData[month];
+    const mLabel = month.charAt(0).toUpperCase() + month.slice(1);
+    const w2days = month === 'may' ? 17 : 16;
+    const w2end  = month === 'apr' ? '30' : month === 'may' ? '31' : '30';
+
+    const w1tb  = document.getElementById(`tbody-scen-${month}1`);
+    const w2tb  = document.getElementById(`tbody-scen-${month}2`);
+    const t1el  = document.getElementById(`title-${month}-w1`);
+    const t2el  = document.getElementById(`title-${month}-w2`);
+
+    if (t1el) t1el.textContent = `${mLabel} Window 1 — 1 to 14 ${mLabel} (14 days) | ${label}`;
+    if (t2el) t2el.textContent = `${mLabel} Window 2 — 15 to ${w2end} ${mLabel} (${w2days} days) | ${label}`;
+
+    if (w1tb) w1tb.innerHTML = rows.map(d => `<tr>
+      <td>${rankBadge(d.rank)}</td>
+      <td>${d.item}</td>
+      <td>${catPill(d.cat)}</td>
+      <td><strong>${d.w1}</strong></td>
+    </tr>`).join('');
+
+    if (w2tb) w2tb.innerHTML = rows.map(d => `<tr>
+      <td>${rankBadge(d.rank)}</td>
+      <td>${d.item}</td>
+      <td>${catPill(d.cat)}</td>
+      <td><strong>${d.w2}</strong></td>
+    </tr>`).join('');
+  });
+
+  // Rebuild chart for active month only
+  ['apr','may','jun'].forEach(month => {
+    const cid = `chart-scen-${month}`;
+    const sData2 = scenRolling[activeScen];
+    const rows = sData2[month];
+    const mLabel = month.charAt(0).toUpperCase() + month.slice(1);
+    destroyChart(cid);
+    const el = document.getElementById(cid);
+    if (!el) return;
+    const ctx = el.getContext('2d');
+    chartRegistry[cid] = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: rows.map(d => d.item),
+        datasets: [
+          { label: `${mLabel} Window 1`, data: rows.map(d => d.w1), backgroundColor: NZB.mid + 'CC', borderColor: NZB.mid, borderWidth: 1.5 },
+          { label: `${mLabel} Window 2`, data: rows.map(d => d.w2), backgroundColor: NZB.accent + 'CC', borderColor: NZB.accent, borderWidth: 1.5 },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 14 } } },
+        scales: {
+          x: { grid: { color: '#E0E9F5' }, ticks: { font: { size: 11 } } },
+          y: { grid: { color: '#E0E9F5' }, ticks: { font: { size: 11 } }, title: { display: true, text: 'Forecast Units', font: { size: 11 }, color: NZB.navy }, beginAtZero: false, suggestedMin: 70 }
+        }
+      }
+    });
+  });
+}
+
+// ════════════════════════════
+// NAVIGATION
+// ════════════════════════════
+function showMain(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  event.target.classList.add('active');
+  if (tab === 'scenarios') {
+    setTimeout(() => {
+      buildScenCompareChart();
+      buildScenQtotalsTable();
+      renderScenRolling();
+    }, 50);
+  }
+}
+
+function showSub(month) {
+  document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sub-' + month).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ════════════════════════════
+// INIT
+// ════════════════════════════
+(function init() {
+  // Q2 tab
+  buildQ2Table();
+  buildQ2Chart();
+
+  // Rolling for Q2 tab
+  buildRollingTable('tbody-apr1', rollingBase.apr, 'w1');
+  buildRollingTable('tbody-apr2', rollingBase.apr, 'w2');
+  buildRollingChart('chart-apr',  rollingBase.apr, 'April');
+
+  buildRollingTable('tbody-may1', rollingBase.may, 'w1');
+  buildRollingTable('tbody-may2', rollingBase.may, 'w2');
+  buildRollingChart('chart-may',  rollingBase.may, 'May');
+
+  buildRollingTable('tbody-jun1', rollingBase.jun, 'w1');
+  buildRollingTable('tbody-jun2', rollingBase.jun, 'w2');
+  buildRollingChart('chart-jun',  rollingBase.jun, 'June');
+
+  // Scenario tab (deferred until shown)
+})();
+</script>
+</body>
+</html>
