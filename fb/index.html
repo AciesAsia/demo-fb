@@ -17,7 +17,6 @@
       --bg:       #edf0f5;
       --white:    #ffffff;
       --text:     #1a2a40;
-      --error:    #DC143C;
     }
 
     body {
@@ -60,70 +59,6 @@
       text-decoration: none;
     }
     .logo-sq img { width: 36px; height: 36px; object-fit: contain; }
-
-    /* ── Gate ── */
-    #gate {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg);
-      padding: 3rem 1rem;
-    }
-
-    .gate-box {
-      background: var(--white);
-      border-top: 4px solid var(--accent);
-      border-radius: 10px;
-      padding: 2.5rem 2rem;
-      width: 100%;
-      max-width: 360px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.09);
-      text-align: center;
-    }
-
-    .gate-box h1 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
-
-    .gate-box p {
-      font-size: 0.85rem;
-      color: #555;
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
-    }
-
-    .gate-box input[type="password"] {
-      width: 100%;
-      background: #2d2d2d;
-      border: none;
-      border-radius: 6px;
-      padding: 0.8rem 1rem;
-      font-size: 0.95rem;
-      font-family: 'Comfortaa', sans-serif;
-      color: #aaa;
-      outline: none;
-      margin-bottom: 0.75rem;
-    }
-    .gate-box input[type="password"]::placeholder { color: #888; }
-    .gate-box input[type="password"]:focus { box-shadow: 0 0 0 2px var(--accent); }
-
-    #error-msg {
-      color: var(--error);
-      font-size: 0.8rem;
-      min-height: 1.2em;
-      margin-top: 0.4rem;
-    }
-
-    /* ── Dashboard (unlocked) ── */
-    #dashboard {
-      display: none;
-      flex: 1;
-      flex-direction: column;
-    }
 
     .section-hero {
       background: var(--primary);
@@ -210,75 +145,25 @@
     </a>
   </header>
 
-  <!-- Gate -->
-  <div id="gate">
-    <div class="gate-box">
-      <h1>F&amp;B Analytics</h1>
-      <p>This section is password protected.<br>Enter your access password to continue.</p>
-      <input type="password" id="pwd-input" placeholder="Enter password" autocomplete="current-password" />
-      <div id="error-msg"></div>
-    </div>
+  <div class="section-hero">
+    <h1>Food &amp; Beverage</h1>
+    <p>Select a venue to explore its analytics dashboards.</p>
   </div>
 
-  <!-- Dashboard -->
-  <div id="dashboard">
-    <div class="section-hero">
-      <h1>Food &amp; Beverage</h1>
-      <p>Select a venue to explore its analytics dashboards.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">☕</div>
+      <h2>Coffee Shop</h2>
+      <a class="card-btn" href="../Coffee Shop/CS_Sales_Dashboard.html">Sales Dashboard</a>
     </div>
-    <div class="cards">
-      <div class="card">
-        <div class="card-icon">☕</div>
-        <h2>Coffee Shop</h2>
-        <a class="card-btn" href="../Coffee Shop/CS_Sales_Dashboard.html">Sales Dashboard</a>
-      </div>
-      <div class="card">
-        <div class="card-icon">🍽️</div>
-        <h2>Restaurant</h2>
-        <a class="card-btn" href="../Restaurant 01/index.html">Restaurant Dashboard</a>
-      </div>
+    <div class="card">
+      <div class="card-icon">🍽️</div>
+      <h2>Restaurant</h2>
+      <a class="card-btn" href="../Restaurant 01/index.html">Restaurant Dashboard</a>
     </div>
   </div>
 
   <footer>© 2026 NZB Consulting. All rights reserved.</footer>
-
-  <script>
-    const SESSION_KEY = 'nzb_fb_auth';
-    // SHA-256 of CS0102@ph!
-    const CORRECT_HASH = '4b53a960c53f9239f3ee66affa147324917eeed299bef06789e70eed0175b082';
-
-    async function hashString(str) {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    }
-
-    async function checkPassword() {
-      const input = document.getElementById('pwd-input').value;
-      const errEl = document.getElementById('error-msg');
-      const hash = await hashString(input);
-      if (hash === CORRECT_HASH) {
-        sessionStorage.setItem(SESSION_KEY, '1');
-        unlock();
-      } else {
-        errEl.textContent = 'Incorrect password. Please try again.';
-        document.getElementById('pwd-input').value = '';
-        document.getElementById('pwd-input').focus();
-      }
-    }
-
-    function unlock() {
-      document.getElementById('gate').style.display = 'none';
-      const dash = document.getElementById('dashboard');
-      dash.style.display = 'flex';
-      dash.style.flexDirection = 'column';
-    }
-
-    document.getElementById('pwd-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') checkPassword();
-    });
-
-    if (sessionStorage.getItem(SESSION_KEY) === '1') unlock();
-  </script>
 
 </body>
 </html>
