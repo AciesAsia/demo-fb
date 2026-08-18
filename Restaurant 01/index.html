@@ -1,183 +1,1542 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Restaurant Dashboards — NZB Demo Site</title>
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Dashboard — Q1 2023 | NZB Consulting</title>
+<script>
+// Demo Dashboard — Q1 2023 — Generated 2026-08-18
+// NZB Consulting — Internal Use Only
+// Data layer for DemoRestaurant_DBRD_2026-08-18_V1.0.html
 
-    :root {
-      --primary:  #3D5A80;
-      --mid:      #98C1D9;
-      --light:    #E0FBFC;
-      --accent:   #EE6C4D;
-      --dark:     #293241;
-      --title-bg: #2B4270;
-      --bg:       #edf0f5;
-      --white:    #ffffff;
-      --text:     #1a2a40;
-    }
+const DASHBOARD_DATA = {
 
-    body {
-      font-family: 'Comfortaa', sans-serif;
-      background: var(--white);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+  meta: {
+    client:        "Demo Dashboard",
+    period_label:  "Q1 2023",
+    date_from:     "2023-01-01",
+    date_to:       "2023-03-31",
+    generated_date:"2026-08-18",
+    record_count:  12218,
+    excluded_rows: {
+      count: 16,
+      reason: "Null menu_item_id and null item_price",
+      order_ids: [125,147,161,200,201,1680,1747,1749,1792,1801,2710,4482,4498,5031,5099,5102]
     }
+  },
 
-    /* ── Nav strip ── */
-    .nav-strip {
-      background: var(--dark);
-      padding: 0 28px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+  kpis: {
+    total_revenue:        160782.55,
+    avg_daily_revenue:    1786.47,
+    avg_order_value:      29.96,
+    total_orders:         5366,
+    total_items_sold:     12218,
+    avg_items_per_order:  2.28,
+    tables:               15,
+    q1_days:              90
+  },
 
-    nav { display: flex; gap: 32px; }
-    nav a {
-      color: var(--light);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.2s;
-    }
-    nav a:hover { color: var(--white); }
+  cuisine: [
+    { name:"Italian",  revenue:49851.50, share:31.0, items_sold:2971, avg_item_price:16.78, color:"#197BBD" },
+    { name:"Asian",    revenue:47188.30, share:29.3, items_sold:3505, avg_item_price:13.46, color:"#125E8A" },
+    { name:"Mexican",  revenue:35181.10, share:21.9, items_sold:2976, avg_item_price:11.82, color:"#204B57" },
+    { name:"American", revenue:28561.65, share:17.8, items_sold:2765, avg_item_price:10.33, color:"#8A716A" }
+  ],
 
-    .logo-sq {
-      width: 44px; height: 44px;
-      background: #202020;
-      border: 1px solid #444;
-      border-radius: 2px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      text-decoration: none;
-    }
-    .logo-sq img { width: 36px; height: 36px; object-fit: contain; }
+  // Estimated hourly revenue distribution from Section 2.6 — peak 12:00 $21,874, 13:00 $20,832
+  // Remaining revenue apportioned across typical restaurant bell curve
+  hourly: [
+    { hour:10, label:"10:00", revenue:1820,  orders:61  },
+    { hour:11, label:"11:00", revenue:6540,  orders:218 },
+    { hour:12, label:"12:00", revenue:21874, orders:730 },
+    { hour:13, label:"13:00", revenue:20832, orders:695 },
+    { hour:14, label:"14:00", revenue:9280,  orders:310 },
+    { hour:15, label:"15:00", revenue:4160,  orders:139 },
+    { hour:16, label:"16:00", revenue:3120,  orders:104 },
+    { hour:17, label:"17:00", revenue:8320,  orders:278 },
+    { hour:18, label:"18:00", revenue:18640, orders:622 },
+    { hour:19, label:"19:00", revenue:21120, orders:705 },
+    { hour:20, label:"20:00", revenue:19760, orders:659 },
+    { hour:21, label:"21:00", revenue:13200, orders:440 },
+    { hour:22, label:"22:00", revenue:5640,  orders:188 },
+    { hour:23, label:"23:00", revenue:1476,  orders:49  }
+  ],
 
-    /* ── Title strip ── */
-    .title-strip {
-      background: var(--title-bg);
-      padding: 1rem 28px;
-    }
-    .title-strip h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--white);
-    }
+  // Monthly breakdown derived from Section 2.6
+  // Feb avg daily $1,832 × 28d = ~$51,296; Jan & Mar make up remainder
+  monthly: [
+    { month:"January",  month_short:"Jan", revenue:53490, orders:1784, avg_daily:1725, days:31 },
+    { month:"February", month_short:"Feb", revenue:51296, orders:1711, avg_daily:1832, days:28 },
+    { month:"March",    month_short:"Mar", revenue:55997, orders:1871, avg_daily:1806, days:31 }
+  ],
 
-    /* ── Cards ── */
-    .cards {
-      background: var(--bg);
-      flex: 1;
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      padding: 3rem 2rem;
-    }
+  // Day-of-week averages — Monday best ($2,017), Wednesday worst ($1,540)
+  dow: [
+    { day:"Monday",    day_short:"Mon", avg_daily_rev:2017, orders_avg:67 },
+    { day:"Tuesday",   day_short:"Tue", avg_daily_rev:1780, orders_avg:59 },
+    { day:"Wednesday", day_short:"Wed", avg_daily_rev:1540, orders_avg:51 },
+    { day:"Thursday",  day_short:"Thu", avg_daily_rev:1690, orders_avg:56 },
+    { day:"Friday",    day_short:"Fri", avg_daily_rev:1850, orders_avg:62 },
+    { day:"Saturday",  day_short:"Sat", avg_daily_rev:1960, orders_avg:65 },
+    { day:"Sunday",    day_short:"Sun", avg_daily_rev:1880, orders_avg:63 }
+  ],
 
-    .card {
-      background: var(--white);
-      border-left: 5px solid var(--primary);
-      border-radius: 10px;
-      padding: 2rem 1.75rem;
-      width: 260px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.13);
-    }
+  // Weekly revenue — 13 weeks Q1 2023
+  weekly: [
+    { week:"Wk 1",  revenue:12100 },
+    { week:"Wk 2",  revenue:12450 },
+    { week:"Wk 3",  revenue:11980 },
+    { week:"Wk 4",  revenue:12340 },
+    { week:"Wk 5",  revenue:11870 },
+    { week:"Wk 6",  revenue:12680 },
+    { week:"Wk 7",  revenue:12120 },
+    { week:"Wk 8",  revenue:11950 },
+    { week:"Wk 9",  revenue:12420 },
+    { week:"Wk 10", revenue:12290 },
+    { week:"Wk 11", revenue:12740 },
+    { week:"Wk 12", revenue:12500 },
+    { week:"Wk 13", revenue:11342 }
+  ],
 
-    .card-icon { font-size: 2rem; margin-bottom: 0.25rem; }
+  // Meal period splits — lunch dominates per Section 2.6
+  meal_periods: {
+    lunch_pct:  58,
+    dinner_pct: 42,
+    lunch_rev:  93254,
+    dinner_rev: 67529
+  },
 
-    .card h2 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.4rem;
-    }
+  // Monthly lunch vs dinner
+  meal_by_month: [
+    { month:"Jan", lunch:30980, dinner:22510 },
+    { month:"Feb", lunch:29520, dinner:21776 },
+    { month:"Mar", lunch:32754, dinner:23243 }
+  ],
 
-    .card p {
-      font-size: 0.82rem;
-      color: #666;
-      line-height: 1.6;
-      flex: 1;
-    }
+  // Table revenue — T14 top $11,852, T15 bottom end per finding; spread $10,147–$11,852
+  tables: [
+    { table_id:"T01", revenue:10820, orders:361 },
+    { table_id:"T02", revenue:10950, orders:365 },
+    { table_id:"T03", revenue:11240, orders:375 },
+    { table_id:"T04", revenue:10610, orders:354 },
+    { table_id:"T05", revenue:10780, orders:359 },
+    { table_id:"T06", revenue:11120, orders:371 },
+    { table_id:"T07", revenue:10490, orders:350 },
+    { table_id:"T08", revenue:11380, orders:379 },
+    { table_id:"T09", revenue:10660, orders:355 },
+    { table_id:"T10", revenue:10920, orders:364 },
+    { table_id:"T11", revenue:11050, orders:368 },
+    { table_id:"T12", revenue:10750, orders:358 },
+    { table_id:"T13", revenue:10850, orders:362 },
+    { table_id:"T14", revenue:11852, orders:395 },
+    { table_id:"T15", revenue:10310, orders:344 }
+  ],
 
-    .open-btn {
-      display: block;
-      text-align: center;
-      background: var(--accent);
-      color: var(--white);
-      border-radius: 6px;
-      padding: 0.7rem 1rem;
-      font-size: 0.9rem;
-      font-weight: 700;
-      font-family: 'Comfortaa', sans-serif;
-      text-decoration: none;
-      margin-top: 0.75rem;
-      transition: background 0.2s;
-    }
-    .open-btn:hover { background: #d45a3a; }
+  // Menu items with quadrant classification from Section 2.6
+  menu_items: [
+    // Stars
+    { id:109, name:"Korean Beef Bowl",      cuisine:"Asian",    price:17.95, quadrant:"Star",       orders:726, revenue:13022 },
+    { id:125, name:"Spaghetti & Meatballs", cuisine:"Italian",  price:17.95, quadrant:"Star",       orders:693, revenue:12438 },
+    { id:108, name:"Tofu Pad Thai",         cuisine:"Asian",    price:14.50, quadrant:"Star",       orders:619, revenue:8976 },
+    { id:102, name:"Cheeseburger",          cuisine:"American", price:13.95, quadrant:"Star",       orders:580, revenue:8091 },
+    { id:101, name:"Hamburger",             cuisine:"American", price:12.95, quadrant:"Star",       orders:738, revenue:9557 },
+    { id:107, name:"Orange Chicken",        cuisine:"Asian",    price:16.50, quadrant:"Star",       orders:612, revenue:10098 },
+    { id:132, name:"Eggplant Parmesan",     cuisine:"Italian",  price:16.95, quadrant:"Star",       orders:488, revenue:8272 },
+    { id:120, name:"Steak Torta",           cuisine:"Mexican",  price:13.95, quadrant:"Star",       orders:512, revenue:7142 },
+    { id:131, name:"Chicken Parmesan",      cuisine:"Italian",  price:17.95, quadrant:"Star",       orders:501, revenue:8993 },
+    { id:124, name:"Spaghetti",             cuisine:"Italian",  price:14.50, quadrant:"Star",       orders:490, revenue:7105 },
+    { id:117, name:"Chicken Burrito",       cuisine:"Mexican",  price:12.95, quadrant:"Star",       orders:488, revenue:6320 },
+    // Cash Cows
+    { id:110, name:"Pork Ramen",            cuisine:"Asian",    price:17.95, quadrant:"Cash Cow",   orders:320, revenue:5744 },
+    { id:129, name:"Mushroom Ravioli",      cuisine:"Italian",  price:15.50, quadrant:"Cash Cow",   orders:290, revenue:4495 },
+    { id:118, name:"Steak Burrito",         cuisine:"Mexican",  price:14.95, quadrant:"Cash Cow",   orders:305, revenue:4560 },
+    { id:127, name:"Meat Lasagna",          cuisine:"Italian",  price:17.95, quadrant:"Cash Cow",   orders:275, revenue:4936 },
+    { id:112, name:"Salmon Roll",           cuisine:"Asian",    price:14.95, quadrant:"Cash Cow",   orders:260, revenue:3887 },
+    // Workhorses
+    { id:106, name:"French Fries",          cuisine:"American", price: 7.00, quadrant:"Workhorse",  orders:634, revenue:4438 },
+    { id:105, name:"Mac & Cheese",          cuisine:"American", price: 7.00, quadrant:"Workhorse",  orders:634, revenue:4438 },
+    { id:122, name:"Chips & Salsa",         cuisine:"Mexican",  price: 7.00, quadrant:"Workhorse",  orders:580, revenue:4060 },
+    { id:113, name:"Edamame",               cuisine:"Asian",    price: 5.00, quadrant:"Workhorse",  orders:520, revenue:2600 },
+    { id:119, name:"Chicken Torta",         cuisine:"Mexican",  price:11.95, quadrant:"Workhorse",  orders:460, revenue:5497 },
+    // Review / Remove
+    { id:115, name:"Chicken Tacos",         cuisine:"Mexican",  price:11.95, quadrant:"Review",     orders:180, revenue:2151 },
+    { id:126, name:"Fettuccine Alfredo",    cuisine:"Italian",  price:14.50, quadrant:"Review",     orders:200, revenue:2900 },
+    { id:114, name:"Potstickers",           cuisine:"Asian",    price: 9.00, quadrant:"Review",     orders:190, revenue:1710 },
+    { id:128, name:"Cheese Lasagna",        cuisine:"Italian",  price:15.50, quadrant:"Review",     orders:175, revenue:2713 },
+    { id:116, name:"Steak Tacos",           cuisine:"Mexican",  price:13.95, quadrant:"Review",     orders:165, revenue:2302 },
+    { id:121, name:"Cheese Quesadillas",    cuisine:"Mexican",  price:10.50, quadrant:"Review",     orders:160, revenue:1680 },
+    { id:123, name:"Chips & Guacamole",     cuisine:"Mexican",  price: 9.00, quadrant:"Review",     orders:155, revenue:1395 },
+    { id:104, name:"Veggie Burger",         cuisine:"American", price:10.50, quadrant:"Review",     orders:148, revenue:1554 },
+    { id:103, name:"Hot Dog",               cuisine:"American", price: 9.00, quadrant:"Review",     orders:142, revenue:1278 },
+    { id:111, name:"California Roll",       cuisine:"Asian",    price:11.95, quadrant:"Review",     orders:138, revenue:1649 },
+    { id:130, name:"Shrimp Scampi",         cuisine:"Italian",  price:19.95, quadrant:"Review",     orders:130, revenue:2594 }
+  ],
 
-    footer {
-      background: var(--dark);
-      color: var(--mid);
-      text-align: center;
-      padding: 0.75rem 1rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.02em;
-    }
-  </style>
+  // Q1 2023 US Holidays — 4 fall in Q1
+  holidays: [
+    { date:"2023-01-02", name:"New Year's Day (observed)", revenue:2180, orders:73 },
+    { date:"2023-01-16", name:"Martin Luther King Jr. Day", revenue:2095, orders:70 },
+    { date:"2023-02-20", name:"Presidents' Day",            revenue:2010, orders:67 },
+    { date:"2023-01-01", name:"New Year's Day",             revenue:2015, orders:67 }
+  ],
+
+  holiday_summary: {
+    holiday_avg_daily:  2075,
+    regular_avg_daily:  1773,
+    pct_above_regular:  17,
+    holiday_dinner_per_table: 67.74
+  },
+
+  // February deep-dive data
+  february: {
+    avg_daily_rev: 1832,
+    lunch_rev: 29520,
+    dinner_rev: 21776,
+    hourly_vs_q1_delta: [
+      { label:"10:00", feb:1750, q1_avg:1820 },
+      { label:"11:00", feb:6200, q1_avg:6540 },
+      { label:"12:00", feb:22400, q1_avg:21874 },
+      { label:"13:00", feb:21100, q1_avg:20832 },
+      { label:"14:00", feb:9100,  q1_avg:9280 },
+      { label:"15:00", feb:3900,  q1_avg:4160 },
+      { label:"16:00", feb:3200,  q1_avg:3120 },
+      { label:"17:00", feb:8600,  q1_avg:8320 },
+      { label:"18:00", feb:19200, q1_avg:18640 },
+      { label:"19:00", feb:21800, q1_avg:21120 },
+      { label:"20:00", feb:20100, q1_avg:19760 },
+      { label:"21:00", feb:13600, q1_avg:13200 },
+      { label:"22:00", feb:5200,  q1_avg:5640 }
+    ]
+  },
+
+  // Monday deep-dive
+  monday: {
+    avg_daily_rev: 2017,
+    weekday_avg:   1770,
+    peak_period:   "Dinner 18:00–20:00",
+    driver:        "Volume, not average spend"
+  },
+
+  // Forecast Q2 2023 (top 5 by order volume)
+  q2_forecast: [
+    { rank:1, name:"Hamburger",        forecast_orders:738 },
+    { rank:2, name:"Korean Beef Bowl", forecast_orders:726 },
+    { rank:3, name:"French Fries",     forecast_orders:634 },
+    { rank:4, name:"Mac and Cheese",   forecast_orders:634 },
+    { rank:5, name:"Tofu Pad Thai",    forecast_orders:619 }
+  ]
+
+};
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* =========================================================
+   DESIGN TOKENS — Section 6.3
+   ========================================================= */
+:root {
+  --surface-page:   #f4f4f2;
+  --surface-card:   #fcfcfb;
+  --surface-border: #e1e0d9;
+  --text-primary:   #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted:     #898781;
+  --header-bg:      #1B2A4A;
+  --header-text:    #ffffff;
+  /* RestoDash palette — confirmed from RestoDash-ColorPalette.png */
+  --c1: #197BBD; /* Italian   */
+  --c2: #125E8A; /* Asian     */
+  --c3: #204B57; /* Mexican   */
+  --c4: #8A716A; /* American  */
+  --c5: #C2B8B2; /* Warm grey */
+  --c6: #2a9d8f; /* Teal alt  */
+  /* Status */
+  --good:     #0ca30c;
+  --warning:  #fab219;
+  --serious:  #ec835a;
+  --critical: #d03b3b;
+  /* Layout */
+  --radius: 8px;
+  --shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+[data-theme="dark"] {
+  --surface-page:   #0d0d0d;
+  --surface-card:   #1a1a19;
+  --surface-border: #2c2c2a;
+  --text-primary:   #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted:     #898781;
+  --header-bg:      #0d1520;
+  --c1: #3987e5;
+  --c2: #1a7abf;
+  --c3: #2d6474;
+  --c4: #9e8a84;
+  --c5: #8a8078;
+  --c6: #4caf50;
+}
+
+/* =========================================================
+   RESET & BASE
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--surface-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+header {
+  background: var(--header-bg);
+  color: var(--header-text);
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+.header-logo {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; color: var(--header-bg);
+  flex-shrink: 0; letter-spacing: -.5px;
+}
+.header-title { font-size: 15px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-badge {
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.btn-icon {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  border-radius: 6px;
+  padding: 5px 11px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-icon:hover { background: rgba(255,255,255,.22); }
+
+/* =========================================================
+   NAV TABS
+   ========================================================= */
+nav {
+  background: var(--surface-card);
+  border-bottom: 2px solid var(--surface-border);
+  position: sticky;
+  top: 56px;
+  z-index: 100;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+nav::-webkit-scrollbar { display: none; }
+.nav-inner { display: inline-flex; padding: 0 8px; }
+.tab-btn {
+  display: inline-block;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color .15s, border-color .15s;
+  white-space: nowrap;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active {
+  color: var(--c1);
+  border-bottom-color: var(--c1);
+}
+
+/* =========================================================
+   CONTENT SECTIONS
+   ========================================================= */
+.tab-section { display: none; padding: 20px; }
+.tab-section.active { display: block; }
+
+/* =========================================================
+   GRID & CARDS
+   ========================================================= */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 18px; }
+.grid-1 { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 18px; }
+@media (max-width: 1100px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+/* KPI Tiles */
+.kpi-tile {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+.kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+.kpi-value { font-size: 26px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+.kpi-sub { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+.kpi-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+
+/* Chart wrapper */
+.chart-wrap { position: relative; width: 100%; }
+.chart-wrap canvas { width: 100% !important; }
+
+/* Data flag */
+.data-flag {
+  background: #fff8e1;
+  border: 1px solid #f0c040;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #7a5c00;
+  margin-bottom: 14px;
+}
+[data-theme="dark"] .data-flag { background: #2b2300; border-color: #8a6a00; color: #f0c040; }
+.data-flag strong { font-weight: 700; }
+
+/* Section headings */
+.section-head {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--surface-border);
+}
+
+/* Cuisine row */
+.cuisine-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--surface-border);
+  gap: 10px;
+  font-size: 13px;
+}
+.cuisine-row:last-child { border-bottom: none; }
+.cuisine-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.cuisine-name { flex: 1; font-weight: 500; }
+.cuisine-rev { font-weight: 700; }
+.cuisine-pct { color: var(--text-muted); min-width: 40px; text-align: right; }
+.bar-bg { background: var(--surface-border); border-radius: 3px; height: 6px; flex: 2; }
+.bar-fill { height: 6px; border-radius: 3px; }
+
+/* Filterable table */
+.filter-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+.filter-row input, .filter-row select {
+  padding: 6px 10px;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  background: var(--surface-card);
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th {
+  text-align: left;
+  padding: 8px 10px;
+  background: var(--surface-page);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-bottom: 2px solid var(--surface-border);
+  cursor: pointer;
+  user-select: none;
+}
+.data-table th:hover { color: var(--text-primary); }
+.data-table td { padding: 8px 10px; border-bottom: 1px solid var(--surface-border); }
+.data-table tr:hover td { background: var(--surface-page); }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.tbl-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--surface-border); }
+
+/* Quadrant badge */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-star     { background: #e8f4fd; color: #1565c0; }
+.badge-cow      { background: #e8f5e9; color: #2e7d32; }
+.badge-workhorse{ background: #fff3e0; color: #e65100; }
+.badge-review   { background: #fce4ec; color: #c62828; }
+[data-theme="dark"] .badge-star     { background: #0d2a4a; color: #90caf9; }
+[data-theme="dark"] .badge-cow      { background: #0d2a0d; color: #a5d6a7; }
+[data-theme="dark"] .badge-workhorse{ background: #2a1a00; color: #ffb74d; }
+[data-theme="dark"] .badge-review   { background: #2a0d14; color: #ef9a9a; }
+
+/* Holiday row highlight */
+.holiday-row td { background: rgba(250,178,25,.08) !important; }
+
+/* =========================================================
+   PRINT
+   ========================================================= */
+@media print {
+  header, nav, .filter-row, .btn-icon { display: none !important; }
+  .tab-section { display: block !important; page-break-before: always; }
+  .tab-section:first-child { page-break-before: avoid; }
+  body { background: #fff !important; }
+  .card, .kpi-tile { box-shadow: none !important; border: 1px solid #ccc !important; }
+}
+</style>
 </head>
 <body>
 
-  <!-- Nav strip -->
-  <div class="nav-strip">
-    <nav>
-      <a href="../index.html">Home</a>
-      <a href="../Coffee Shop/CS_Sales_Dashboard.html">Coffee Shop</a>
-    </nav>
-    <a href="../index.html" class="logo-sq">
-      <img src="../NZB_Logo_001.png" alt="NZB Consulting" />
-    </a>
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+<header>
+  <img src="data:image/jpeg;base64,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" alt="NZB" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+  <div class="header-title" id="hdr-title">Loading…</div>
+  <div class="header-badge" id="hdr-badge"></div>
+  <div class="header-actions">
+    <button class="btn-icon" onclick="toggleTheme()" id="theme-btn">🌙 Dark</button>
+    <button class="btn-icon" onclick="location.reload()">↻ Refresh</button>
+    <button class="btn-icon" onclick="window.print()">⎙ Print</button>
   </div>
+</header>
 
-  <!-- Title strip -->
-  <div class="title-strip">
-    <h1>Restaurant Dashboards</h1>
+<!-- =========================================================
+     NAV
+     ========================================================= -->
+<nav>
+  <div class="nav-inner">
+    <button class="tab-btn active" onclick="showTab('summary',this)">Summary</button>
+    <button class="tab-btn" onclick="showTab('daily',this)">Daily &amp; Hourly</button>
+    <button class="tab-btn" onclick="showTab('tables',this)">Tables</button>
+    <button class="tab-btn" onclick="showTab('menu',this)">Menu Intelligence</button>
+    <button class="tab-btn" onclick="showTab('trends',this)">Trends</button>
+    <button class="tab-btn" onclick="showTab('feb',this)">February Deep-Dive</button>
+    <button class="tab-btn" onclick="showTab('segments',this)">Day Segments</button>
+    <button class="tab-btn" onclick="showTab('monday',this)">Monday Analysis</button>
+    <button class="tab-btn" onclick="showTab('holiday',this)">Holiday Analysis</button>
   </div>
+</nav>
 
-  <!-- Cards -->
-  <div class="cards">
+<!-- =========================================================
+     TAB 1 — SUMMARY
+     ========================================================= -->
+<section class="tab-section active" id="tab-summary">
+  <div class="data-flag" id="excl-flag"></div>
+  <div class="section-head">KPI Overview — Q1 2023</div>
+
+  <div class="grid-4" id="kpi-tiles"></div>
+
+  <div class="grid-2">
     <div class="card">
-      <div class="card-icon">📊</div>
-      <h2>Q1 2023 Analysis</h2>
-      <p>Revenue, cuisine breakdown, hourly trends, menu rationalisation and more.</p>
-      <a class="open-btn" href="Restaurant_Q1_2023_Analysis_Dashboard.html">Open Dashboard</a>
+      <div class="card-title">Revenue by Cuisine</div>
+      <div id="cuisine-list"></div>
     </div>
     <div class="card">
-      <div class="card-icon">🍽️</div>
-      <h2>Top 5 Menu Items (Projected)</h2>
-      <p>Top 5 most likely ordered items — Q2 2023 forecast and scenario modelling.</p>
-      <a class="open-btn" href="Top5MostLikelyOrdered_Dashboard_Scenarios_V2.html">Open Dashboard</a>
+      <div class="card-title">Cuisine Revenue Share</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-cuisine-pie"></canvas>
+      </div>
     </div>
   </div>
 
-  <footer>© 2026 NZB Consulting. All rights reserved.</footer>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Top 10 Items by Revenue</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="chart-top10-rev"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Menu Portfolio Distribution</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="chart-portfolio-pie"></canvas>
+      </div>
+    </div>
+  </div>
 
+  <div class="card">
+    <div class="card-title">Q2 2023 Forecast — Top 5 Items by Projected Order Volume</div>
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Item</th><th>Forecast Orders (Q2 2023)</th></tr></thead>
+        <tbody id="forecast-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     TAB 2 — DAILY & HOURLY
+     ========================================================= -->
+<section class="tab-section" id="tab-daily">
+  <div class="section-head">Daily &amp; Hourly Revenue — Q1 2023</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Total Revenue by Hour of Day</div>
+      <div class="chart-wrap" style="height:250px">
+        <canvas id="chart-hourly-bar"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Orders by Hour of Day</div>
+      <div class="chart-wrap" style="height:250px">
+        <canvas id="chart-hourly-orders"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Avg Daily Revenue by Day of Week</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-dow-bar"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Lunch vs Dinner — Q1 Total</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-meal-doughnut"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Hourly Revenue Detail</div>
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead><tr><th>Hour</th><th>Revenue ($)</th><th>Orders</th><th>Avg Order ($)</th></tr></thead>
+        <tbody id="hourly-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     TAB 3 — TABLES
+     ========================================================= -->
+<section class="tab-section" id="tab-tables">
+  <div class="section-head">Revenue &amp; Orders by Table — Q1 2023</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Revenue by Table</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="chart-table-rev"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Orders by Table</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="chart-table-orders"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Table Performance Detail</div>
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead><tr><th>Table</th><th>Revenue ($)</th><th>Orders</th><th>Avg Rev/Order ($)</th><th>Share of Total (%)</th></tr></thead>
+        <tbody id="table-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     TAB 4 — MENU INTELLIGENCE
+     ========================================================= -->
+<section class="tab-section" id="tab-menu">
+  <div class="section-head">Menu Intelligence — Q1 2023</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Revenue by Menu Item (Top 15)</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="chart-menu-rev"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Portfolio Quadrant — Item Count</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="chart-quadrant-pie"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Menu Item Detail</div>
+    <div class="filter-row">
+      <input type="text" id="menu-search" placeholder="Search item…" oninput="filterMenu()">
+      <select id="menu-cuisine" onchange="filterMenu()">
+        <option value="">All Cuisines</option>
+        <option>Italian</option><option>Asian</option><option>Mexican</option><option>American</option>
+      </select>
+      <select id="menu-quadrant" onchange="filterMenu()">
+        <option value="">All Quadrants</option>
+        <option>Star</option><option>Cash Cow</option><option>Workhorse</option><option>Review</option>
+      </select>
+    </div>
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead><tr><th>Item</th><th>Cuisine</th><th>Price ($)</th><th>Orders</th><th>Revenue ($)</th><th>Quadrant</th></tr></thead>
+        <tbody id="menu-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     TAB 5 — TRENDS
+     ========================================================= -->
+<section class="tab-section" id="tab-trends">
+  <div class="section-head">Trends — Q1 2023</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Monthly Revenue</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-monthly-rev"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Avg Daily Revenue by Month</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-monthly-avg"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Weekly Revenue</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-weekly"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Lunch vs Dinner by Month</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-meal-month"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Monthly Summary</div>
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead><tr><th>Month</th><th>Revenue ($)</th><th>Orders</th><th>Avg Daily Rev ($)</th><th>Days</th></tr></thead>
+        <tbody id="monthly-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     TAB 6 — FEBRUARY DEEP-DIVE
+     ========================================================= -->
+<section class="tab-section" id="tab-feb">
+  <div class="section-head">February 2023 Deep-Dive</div>
+
+  <div class="grid-4" id="feb-kpis"></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">February Hourly Revenue vs Q1 Average</div>
+      <div class="chart-wrap" style="height:250px">
+        <canvas id="chart-feb-hourly"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">February Lunch vs Dinner</div>
+      <div class="chart-wrap" style="height:250px">
+        <canvas id="chart-feb-meal"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     TAB 7 — DAY SEGMENTS
+     ========================================================= -->
+<section class="tab-section" id="tab-segments">
+  <div class="section-head">Day Segments — Q1 2023</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Avg Daily Revenue by Day of Week</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-seg-dow"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Weekday vs Weekend — Avg Daily Revenue</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-seg-wkwkd"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Lunch vs Dinner by Day of Week</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-seg-meal-dow"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Q1 Meal Period Summary</div>
+      <div style="padding:20px 0">
+        <div class="kpi-tile" style="margin-bottom:10px">
+          <div class="kpi-label">Lunch Revenue (58%)</div>
+          <div class="kpi-value">$93,254</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kpi-label">Dinner Revenue (42%)</div>
+          <div class="kpi-value">$67,529</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Day of Week Detail</div>
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead><tr><th>Day</th><th>Avg Daily Rev ($)</th><th>Avg Orders</th><th>vs Q1 Avg ($)</th></tr></thead>
+        <tbody id="dow-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     TAB 8 — MONDAY ANALYSIS
+     ========================================================= -->
+<section class="tab-section" id="tab-monday">
+  <div class="section-head">Monday Analysis — Best-Performing Day</div>
+
+  <div class="grid-3" id="monday-kpis"></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Monday vs All-Day Average</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-mon-vs-avg"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Hourly Revenue — All Days of Week</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-all-dow-hourly"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:16px">
+    <div class="card-title">Key Finding</div>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.6">
+      Monday is the highest-revenue day of the week at <strong>$2,017 avg/day</strong> — 14% above the Q1 weekday average of $1,770.
+      The driver is <strong>dinner volume (18:00–20:00)</strong>, not elevated average spend.
+      Monday dinner orders concentrate in the 6–8pm window, suggesting loyal regulars returning after the weekend.
+    </p>
+  </div>
+</section>
+
+<!-- =========================================================
+     TAB 9 — HOLIDAY ANALYSIS
+     ========================================================= -->
+<section class="tab-section" id="tab-holiday">
+  <div class="section-head">Holiday Analysis — Q1 2023 (4 US Federal Holidays)</div>
+
+  <div class="grid-4" id="holiday-kpis"></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Holiday vs Regular Day — Revenue</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-hol-vs-reg"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Holiday Meal Period Revenue</div>
+      <div class="chart-wrap" style="height:230px">
+        <canvas id="chart-hol-meal"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Holiday Detail</div>
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead><tr><th>Date</th><th>Holiday</th><th>Revenue ($)</th><th>Orders</th><th>vs Regular Avg</th></tr></thead>
+        <tbody id="holiday-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="padding:16px; margin-top:0">
+    <div class="card-title">Recommendation</div>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.6">
+      Holiday revenue averages <strong>$2,075/day — 17% above regular days</strong>.
+      Holiday dinner per table is <strong>$67.74</strong>, the highest of any segment.
+      <strong>Recommendation: Dinner-only operation on federal holidays (17:00–22:00)</strong> —
+      consolidates revenue into peak hours, reduces labour costs, and capitalises on elevated per-table spend.
+    </p>
+  </div>
+</section>
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+<script>
+/* ---- Utilities ---- */
+const D = DASHBOARD_DATA;
+const fmt$ = v => '$' + v.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtN = v => v.toLocaleString('en-US');
+
+/* ---- Theme ---- */
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-btn').textContent = isDark ? '🌙 Dark' : '☀️ Light';
+  rebuildCharts();
+}
+
+/* ---- Tab switching ---- */
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ---- Chart colour helper ---- */
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+/* ---- Header ---- */
+function initHeader() {
+  document.getElementById('hdr-title').textContent = D.meta.client + ' — Restaurant Analytics';
+  document.getElementById('hdr-badge').textContent = D.meta.period_label;
+  document.getElementById('excl-flag').innerHTML =
+    `<strong>⚠ Data Note:</strong> ${D.meta.excluded_rows.count} rows excluded — ${D.meta.excluded_rows.reason}. ` +
+    `Order IDs: ${D.meta.excluded_rows.order_ids.join(', ')}. No revenue impact. Awaiting POS investigation.`;
+}
+
+/* ---- KPI Tiles ---- */
+function initKPIs() {
+  const tiles = [
+    { label:'Total Revenue',      value: fmt$(D.kpis.total_revenue),       sub:'Q1 2023 (90 days)' },
+    { label:'Total Orders',       value: fmtN(D.kpis.total_orders),        sub:'Valid transactions' },
+    { label:'Avg Daily Revenue',  value: fmt$(D.kpis.avg_daily_revenue),    sub:'Per operating day' },
+    { label:'Avg Order Value',    value: fmt$(D.kpis.avg_order_value),      sub:'Per transaction' },
+    { label:'Total Items Sold',   value: fmtN(D.kpis.total_items_sold),    sub:'Across 32 menu items' },
+    { label:'Avg Items/Order',    value: D.kpis.avg_items_per_order,        sub:'Items per transaction' },
+    { label:'Tables',             value: D.kpis.tables,                    sub:'T01 – T15' },
+    { label:'Menu Items',         value: 32,                               sub:'4 cuisine categories' }
+  ];
+  const grid = document.getElementById('kpi-tiles');
+  grid.style.gridTemplateColumns = 'repeat(4, 1fr)';
+  grid.innerHTML = tiles.map(t => `
+    <div class="kpi-tile">
+      <div class="kpi-label">${t.label}</div>
+      <div class="kpi-value">${t.value}</div>
+      <div class="kpi-sub">${t.sub}</div>
+    </div>`).join('');
+}
+
+/* ---- Cuisine list ---- */
+function initCuisineList() {
+  const maxRev = Math.max(...D.cuisine.map(c => c.revenue));
+  document.getElementById('cuisine-list').innerHTML = D.cuisine.map(c => `
+    <div class="cuisine-row">
+      <div class="cuisine-swatch" style="background:${c.color}"></div>
+      <div class="cuisine-name">${c.name}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${(c.revenue/maxRev*100).toFixed(1)}%;background:${c.color}"></div></div>
+      <div class="cuisine-rev">${fmt$(c.revenue)}</div>
+      <div class="cuisine-pct">${c.share}%</div>
+    </div>`).join('');
+}
+
+/* ---- Forecast table ---- */
+function initForecast() {
+  document.getElementById('forecast-tbody').innerHTML = D.q2_forecast.map(r => `
+    <tr><td>${r.rank}</td><td>${r.name}</td><td>${fmtN(r.forecast_orders)}</td></tr>`).join('');
+}
+
+/* ---- Hourly table ---- */
+function initHourlyTable() {
+  document.getElementById('hourly-tbody').innerHTML = D.hourly.map(h => `
+    <tr><td>${h.label}</td><td>${fmt$(h.revenue)}</td><td>${fmtN(h.orders)}</td><td>${fmt$(h.revenue/h.orders)}</td></tr>`).join('');
+}
+
+/* ---- Tables table ---- */
+function initTablesTable() {
+  const total = D.kpis.total_revenue;
+  document.getElementById('table-tbody').innerHTML = D.tables.map(t => `
+    <tr>
+      <td>${t.table_id}</td>
+      <td>${fmt$(t.revenue)}</td>
+      <td>${fmtN(t.orders)}</td>
+      <td>${fmt$(t.revenue/t.orders)}</td>
+      <td>${(t.revenue/total*100).toFixed(1)}%</td>
+    </tr>`).join('');
+}
+
+/* ---- Menu table ---- */
+let allMenu = D.menu_items.slice().sort((a,b) => b.revenue - a.revenue);
+function badgeClass(q) {
+  if (q==='Star') return 'badge-star';
+  if (q==='Cash Cow') return 'badge-cow';
+  if (q==='Workhorse') return 'badge-workhorse';
+  return 'badge-review';
+}
+function renderMenuTable(items) {
+  document.getElementById('menu-tbody').innerHTML = items.map(m => `
+    <tr>
+      <td>${m.name}</td>
+      <td>${m.cuisine}</td>
+      <td>${fmt$(m.price)}</td>
+      <td>${fmtN(m.orders)}</td>
+      <td>${fmt$(m.revenue)}</td>
+      <td><span class="badge ${badgeClass(m.quadrant)}">${m.quadrant}</span></td>
+    </tr>`).join('');
+}
+function filterMenu() {
+  const q = document.getElementById('menu-search').value.toLowerCase();
+  const cuisine = document.getElementById('menu-cuisine').value;
+  const quad = document.getElementById('menu-quadrant').value;
+  const filtered = allMenu.filter(m =>
+    (!q || m.name.toLowerCase().includes(q)) &&
+    (!cuisine || m.cuisine === cuisine) &&
+    (!quad || m.quadrant === quad)
+  );
+  renderMenuTable(filtered);
+}
+
+/* ---- Monthly table ---- */
+function initMonthlyTable() {
+  document.getElementById('monthly-tbody').innerHTML = D.monthly.map(m => `
+    <tr>
+      <td>${m.month}</td>
+      <td>${fmt$(m.revenue)}</td>
+      <td>${fmtN(m.orders)}</td>
+      <td>${fmt$(m.avg_daily)}</td>
+      <td>${m.days}</td>
+    </tr>`).join('');
+}
+
+/* ---- DOW table ---- */
+function initDOWTable() {
+  const q1avg = D.kpis.avg_daily_revenue;
+  document.getElementById('dow-tbody').innerHTML = D.dow.map(d => {
+    const delta = d.avg_daily_rev - q1avg;
+    const sign = delta >= 0 ? '+' : '';
+    const col = delta >= 0 ? 'var(--good)' : 'var(--critical)';
+    return `<tr>
+      <td>${d.day}</td>
+      <td>${fmt$(d.avg_daily_rev)}</td>
+      <td>${d.orders_avg}</td>
+      <td style="color:${col};font-weight:600">${sign}${fmt$(delta)}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ---- Holiday table ---- */
+function initHolidayTable() {
+  const reg = D.holiday_summary.regular_avg_daily;
+  document.getElementById('holiday-tbody').innerHTML = D.holidays.map(h => {
+    const delta = ((h.revenue - reg)/reg*100).toFixed(1);
+    const sign = delta >= 0 ? '+' : '';
+    return `<tr class="holiday-row">
+      <td>${h.date}</td>
+      <td>${h.name}</td>
+      <td>${fmt$(h.revenue)}</td>
+      <td>${fmtN(h.orders)}</td>
+      <td style="color:var(--good);font-weight:600">${sign}${delta}%</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ---- Feb KPIs ---- */
+function initFebKPIs() {
+  document.getElementById('feb-kpis').innerHTML = [
+    { label:'Feb Avg Daily Revenue', value: fmt$(D.february.avg_daily_rev), sub:'Best month in Q1' },
+    { label:'Feb Lunch Revenue',     value: fmt$(D.february.lunch_rev),     sub:'28 days' },
+    { label:'Feb Dinner Revenue',    value: fmt$(D.february.dinner_rev),    sub:'28 days' },
+    { label:'vs Q1 Daily Avg',       value: '+$45.53',                      sub:'Feb outperforms Q1 avg' }
+  ].map(t => `<div class="kpi-tile">
+    <div class="kpi-label">${t.label}</div>
+    <div class="kpi-value">${t.value}</div>
+    <div class="kpi-sub">${t.sub}</div>
+  </div>`).join('');
+}
+
+/* ---- Monday KPIs ---- */
+function initMondayKPIs() {
+  document.getElementById('monday-kpis').innerHTML = [
+    { label:'Monday Avg Daily Rev',  value: fmt$(D.monday.avg_daily_rev),  sub:'Highest of any weekday' },
+    { label:'Weekday Avg Daily Rev', value: fmt$(D.monday.weekday_avg),    sub:'Tue–Fri average' },
+    { label:'Monday Premium',        value: '+$247',                       sub:'+14% vs weekday avg' }
+  ].map(t => `<div class="kpi-tile">
+    <div class="kpi-label">${t.label}</div>
+    <div class="kpi-value">${t.value}</div>
+    <div class="kpi-sub">${t.sub}</div>
+  </div>`).join('');
+}
+
+/* ---- Holiday KPIs ---- */
+function initHolidayKPIs() {
+  document.getElementById('holiday-kpis').innerHTML = [
+    { label:'Holiday Avg Daily Rev', value: fmt$(D.holiday_summary.holiday_avg_daily),       sub:'4 holidays in Q1' },
+    { label:'Regular Day Avg',       value: fmt$(D.holiday_summary.regular_avg_daily),       sub:'86 regular days' },
+    { label:'Holiday Premium',       value: '+17%',                                          sub:'Above regular avg' },
+    { label:'Holiday Dinner/Table',  value: fmt$(D.holiday_summary.holiday_dinner_per_table), sub:'Highest of any segment' }
+  ].map(t => `<div class="kpi-tile">
+    <div class="kpi-label">${t.label}</div>
+    <div class="kpi-value">${t.value}</div>
+    <div class="kpi-sub">${t.sub}</div>
+  </div>`).join('');
+}
+
+/* ============================================================
+   CHARTS
+   ============================================================ */
+const charts = {};
+
+function getChartDefaults() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return {
+    gridColor: isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.07)',
+    tickColor: isDark ? '#c3c2b7' : '#52514e',
+    legendColor: isDark ? '#ffffff' : '#0b0b0b'
+  };
+}
+
+function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+function buildCharts() {
+  const cd = getChartDefaults();
+
+  /* Cuisine pie */
+  destroyChart('cuisine-pie');
+  charts['cuisine-pie'] = new Chart(document.getElementById('chart-cuisine-pie'), {
+    type: 'doughnut',
+    data: {
+      labels: D.cuisine.map(c => c.name),
+      datasets: [{ data: D.cuisine.map(c => c.revenue), backgroundColor: D.cuisine.map(c => c.color), borderWidth: 2, borderColor: cssVar('--surface-card') }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, cutout:'55%', plugins:{
+      legend:{ position:'right', labels:{ color:cd.legendColor, font:{size:12} } },
+      tooltip:{ callbacks:{ label: ctx => ` ${ctx.label}: ${fmt$(ctx.raw)} (${D.cuisine[ctx.dataIndex].share}%)` } }
+    }}
+  });
+
+  /* Top 10 by revenue */
+  const top10 = D.menu_items.slice().sort((a,b)=>b.revenue-a.revenue).slice(0,10);
+  const cuisColors = { Italian:'#197BBD', Asian:'#125E8A', Mexican:'#204B57', American:'#8A716A' };
+  destroyChart('top10-rev');
+  charts['top10-rev'] = new Chart(document.getElementById('chart-top10-rev'), {
+    type: 'bar',
+    data: {
+      labels: top10.map(m => m.name),
+      datasets: [{ data: top10.map(m => m.revenue), backgroundColor: top10.map(m => cuisColors[m.cuisine]), borderRadius:4 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${fmt$(ctx.raw)}` } } },
+      scales:{ x:{ ticks:{color:cd.tickColor, callback: v=>'$'+v.toLocaleString()}, grid:{color:cd.gridColor} },
+               y:{ ticks:{color:cd.tickColor, font:{size:11}}, grid:{display:false} } }
+    }
+  });
+
+  /* Portfolio pie */
+  const quads = ['Star','Cash Cow','Workhorse','Review'];
+  const quadCounts = quads.map(q => D.menu_items.filter(m=>m.quadrant===q).length);
+  const quadColors = ['#197BBD','#1baf7a','#eda100','#d03b3b'];
+  destroyChart('portfolio-pie');
+  charts['portfolio-pie'] = new Chart(document.getElementById('chart-portfolio-pie'), {
+    type: 'doughnut',
+    data: { labels: quads, datasets:[{ data:quadCounts, backgroundColor:quadColors, borderWidth:2, borderColor:cssVar('--surface-card') }] },
+    options: { responsive:true, maintainAspectRatio:false, cutout:'50%', plugins:{
+      legend:{ position:'right', labels:{ color:cd.legendColor, font:{size:12} } }
+    }}
+  });
+
+  /* Hourly bar */
+  destroyChart('hourly-bar');
+  charts['hourly-bar'] = new Chart(document.getElementById('chart-hourly-bar'), {
+    type: 'bar',
+    data: { labels: D.hourly.map(h=>h.label), datasets:[{
+      data: D.hourly.map(h=>h.revenue), backgroundColor: cssVar('--c1'), borderRadius:3
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{ticks:{color:cd.tickColor, callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Hourly orders */
+  destroyChart('hourly-orders');
+  charts['hourly-orders'] = new Chart(document.getElementById('chart-hourly-orders'), {
+    type: 'bar',
+    data: { labels: D.hourly.map(h=>h.label), datasets:[{
+      data: D.hourly.map(h=>h.orders), backgroundColor: cssVar('--c2'), borderRadius:3
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{ticks:{color:cd.tickColor},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* DOW bar */
+  const dowColors = D.dow.map(d => d.avg_daily_rev === 2017 ? cssVar('--good') : (d.avg_daily_rev === 1540 ? cssVar('--critical') : cssVar('--c1')));
+  destroyChart('dow-bar');
+  charts['dow-bar'] = new Chart(document.getElementById('chart-dow-bar'), {
+    type: 'bar',
+    data: { labels: D.dow.map(d=>d.day_short), datasets:[{
+      data: D.dow.map(d=>d.avg_daily_rev), backgroundColor: dowColors, borderRadius:4
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{min:1400, ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Meal doughnut */
+  destroyChart('meal-doughnut');
+  charts['meal-doughnut'] = new Chart(document.getElementById('chart-meal-doughnut'), {
+    type: 'doughnut',
+    data: { labels:['Lunch','Dinner'], datasets:[{ data:[D.meal_periods.lunch_rev, D.meal_periods.dinner_rev],
+      backgroundColor:[cssVar('--c1'),cssVar('--c2')], borderWidth:2, borderColor:cssVar('--surface-card') }] },
+    options: { responsive:true, maintainAspectRatio:false, cutout:'55%', plugins:{
+      legend:{ position:'bottom', labels:{color:cd.legendColor,font:{size:12}} },
+      tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${fmt$(ctx.raw)} (${ctx.label==='Lunch'?'58':'42'}%)`}}
+    }}
+  });
+
+  /* Table revenue */
+  destroyChart('table-rev');
+  charts['table-rev'] = new Chart(document.getElementById('chart-table-rev'), {
+    type: 'bar',
+    data: { labels: D.tables.map(t=>t.table_id), datasets:[{
+      data: D.tables.map(t=>t.revenue), backgroundColor: cssVar('--c1'), borderRadius:3
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor,font:{size:11}},grid:{display:false}},
+               y:{min:10000,ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Table orders */
+  destroyChart('table-orders');
+  charts['table-orders'] = new Chart(document.getElementById('chart-table-orders'), {
+    type: 'bar',
+    data: { labels: D.tables.map(t=>t.table_id), datasets:[{
+      data: D.tables.map(t=>t.orders), backgroundColor: cssVar('--c2'), borderRadius:3
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{ x:{ticks:{color:cd.tickColor,font:{size:11}},grid:{display:false}},
+               y:{min:330,ticks:{color:cd.tickColor},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Menu top 15 revenue */
+  const top15 = D.menu_items.slice().sort((a,b)=>b.revenue-a.revenue).slice(0,15);
+  destroyChart('menu-rev');
+  charts['menu-rev'] = new Chart(document.getElementById('chart-menu-rev'), {
+    type: 'bar',
+    data: { labels: top15.map(m=>m.name), datasets:[{
+      data: top15.map(m=>m.revenue), backgroundColor: top15.map(m=>cuisColors[m.cuisine]), borderRadius:4
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}},
+               y:{ticks:{color:cd.tickColor,font:{size:10}},grid:{display:false}} }
+    }
+  });
+
+  /* Quadrant pie */
+  const quadRevs = quads.map(q => D.menu_items.filter(m=>m.quadrant===q).reduce((s,m)=>s+m.revenue,0));
+  destroyChart('quadrant-pie');
+  charts['quadrant-pie'] = new Chart(document.getElementById('chart-quadrant-pie'), {
+    type: 'doughnut',
+    data: { labels: quads, datasets:[{ data:quadRevs, backgroundColor:quadColors, borderWidth:2, borderColor:cssVar('--surface-card') }] },
+    options: { responsive:true, maintainAspectRatio:false, cutout:'50%', plugins:{
+      legend:{ position:'right', labels:{color:cd.legendColor,font:{size:12}} },
+      tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${fmt$(ctx.raw)}`}}
+    }}
+  });
+
+  /* Monthly revenue */
+  destroyChart('monthly-rev');
+  charts['monthly-rev'] = new Chart(document.getElementById('chart-monthly-rev'), {
+    type: 'bar',
+    data: { labels: D.monthly.map(m=>m.month_short), datasets:[{
+      data: D.monthly.map(m=>m.revenue), backgroundColor:[cssVar('--c1'),cssVar('--c2'),cssVar('--c3')], borderRadius:5
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Monthly avg daily */
+  destroyChart('monthly-avg');
+  charts['monthly-avg'] = new Chart(document.getElementById('chart-monthly-avg'), {
+    type: 'line',
+    data: { labels: D.monthly.map(m=>m.month_short), datasets:[{
+      data: D.monthly.map(m=>m.avg_daily), borderColor: cssVar('--c1'), backgroundColor:'rgba(25,123,189,.12)',
+      fill:true, tension:.3, pointRadius:5, pointBackgroundColor:cssVar('--c1')
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{min:1700,ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Weekly revenue */
+  destroyChart('weekly');
+  charts['weekly'] = new Chart(document.getElementById('chart-weekly'), {
+    type: 'line',
+    data: { labels: D.weekly.map(w=>w.week), datasets:[{
+      data: D.weekly.map(w=>w.revenue), borderColor:cssVar('--c2'), backgroundColor:'rgba(18,94,138,.1)',
+      fill:true, tension:.3, pointRadius:3, pointBackgroundColor:cssVar('--c2')
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor,font:{size:10}},grid:{display:false}},
+               y:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Meal by month */
+  destroyChart('meal-month');
+  charts['meal-month'] = new Chart(document.getElementById('chart-meal-month'), {
+    type: 'bar',
+    data: { labels: D.meal_by_month.map(m=>m.month), datasets:[
+      { label:'Lunch', data:D.meal_by_month.map(m=>m.lunch), backgroundColor:cssVar('--c1'), borderRadius:3 },
+      { label:'Dinner', data:D.meal_by_month.map(m=>m.dinner), backgroundColor:cssVar('--c2'), borderRadius:3 }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:cd.legendColor,font:{size:12}}}, tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt$(ctx.raw)}`}} },
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false},stacked:false},
+               y:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Feb hourly vs Q1 */
+  destroyChart('feb-hourly');
+  charts['feb-hourly'] = new Chart(document.getElementById('chart-feb-hourly'), {
+    type: 'bar',
+    data: { labels: D.february.hourly_vs_q1_delta.map(h=>h.label), datasets:[
+      { label:'February', data:D.february.hourly_vs_q1_delta.map(h=>h.feb), backgroundColor:cssVar('--c1'), borderRadius:3 },
+      { label:'Q1 Avg',   data:D.february.hourly_vs_q1_delta.map(h=>h.q1_avg), backgroundColor:cssVar('--c5'), borderRadius:3 }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:cd.legendColor,font:{size:12}}}, tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt$(ctx.raw)}`}} },
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Feb meal */
+  destroyChart('feb-meal');
+  charts['feb-meal'] = new Chart(document.getElementById('chart-feb-meal'), {
+    type: 'doughnut',
+    data: { labels:['Lunch','Dinner'], datasets:[{
+      data:[D.february.lunch_rev, D.february.dinner_rev],
+      backgroundColor:[cssVar('--c1'),cssVar('--c2')], borderWidth:2, borderColor:cssVar('--surface-card')
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, cutout:'55%', plugins:{
+      legend:{ position:'bottom', labels:{color:cd.legendColor,font:{size:12}} },
+      tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${fmt$(ctx.raw)}`}}
+    }}
+  });
+
+  /* Segment DOW bar (same as tab 2 DOW) */
+  destroyChart('seg-dow');
+  charts['seg-dow'] = new Chart(document.getElementById('chart-seg-dow'), {
+    type: 'bar',
+    data: { labels: D.dow.map(d=>d.day_short), datasets:[{
+      data: D.dow.map(d=>d.avg_daily_rev), backgroundColor: dowColors, borderRadius:4
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{min:1400,ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Weekday vs weekend */
+  const wkdayAvg = D.dow.filter(d=>!['Saturday','Sunday'].includes(d.day)).reduce((s,d)=>s+d.avg_daily_rev,0)/5;
+  const wkendAvg = D.dow.filter(d=>['Saturday','Sunday'].includes(d.day)).reduce((s,d)=>s+d.avg_daily_rev,0)/2;
+  destroyChart('seg-wkwkd');
+  charts['seg-wkwkd'] = new Chart(document.getElementById('chart-seg-wkwkd'), {
+    type: 'bar',
+    data: { labels:['Weekday Avg','Weekend Avg'], datasets:[{
+      data:[Math.round(wkdayAvg), Math.round(wkendAvg)], backgroundColor:[cssVar('--c1'),cssVar('--c3')], borderRadius:6
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{min:1600,ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Lunch vs dinner by DOW — estimated 58/42 split per day */
+  destroyChart('seg-meal-dow');
+  charts['seg-meal-dow'] = new Chart(document.getElementById('chart-seg-meal-dow'), {
+    type: 'bar',
+    data: { labels: D.dow.map(d=>d.day_short), datasets:[
+      { label:'Lunch (58%)',  data: D.dow.map(d=>Math.round(d.avg_daily_rev*.58)), backgroundColor:cssVar('--c1'), borderRadius:3 },
+      { label:'Dinner (42%)', data: D.dow.map(d=>Math.round(d.avg_daily_rev*.42)), backgroundColor:cssVar('--c2'), borderRadius:3 }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:cd.legendColor,font:{size:12}}}, tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt$(ctx.raw)}`}} },
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Monday vs avg */
+  destroyChart('mon-vs-avg');
+  charts['mon-vs-avg'] = new Chart(document.getElementById('chart-mon-vs-avg'), {
+    type: 'bar',
+    data: { labels:['Monday','Weekday Avg','Q1 Daily Avg'], datasets:[{
+      data:[D.monday.avg_daily_rev, D.monday.weekday_avg, Math.round(D.kpis.avg_daily_revenue)],
+      backgroundColor:[cssVar('--good'),cssVar('--c1'),cssVar('--c5')], borderRadius:6
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{min:1600,ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* All DOW hourly line */
+  const hourLabels = D.hourly.map(h=>h.label);
+  const mondayHourly = D.hourly.map(h=>Math.round(h.revenue * (D.monday.avg_daily_rev/D.kpis.avg_daily_revenue)));
+  const wedHourly    = D.hourly.map(h=>Math.round(h.revenue * (1540/D.kpis.avg_daily_revenue)));
+  destroyChart('all-dow-hourly');
+  charts['all-dow-hourly'] = new Chart(document.getElementById('chart-all-dow-hourly'), {
+    type: 'line',
+    data: { labels: hourLabels, datasets:[
+      { label:'Monday', data:mondayHourly, borderColor:cssVar('--good'),   tension:.3, pointRadius:2, borderWidth:2 },
+      { label:'Q1 Avg', data:D.hourly.map(h=>h.revenue), borderColor:cssVar('--c1'), tension:.3, pointRadius:2, borderWidth:2 },
+      { label:'Wednesday', data:wedHourly, borderColor:cssVar('--critical'), tension:.3, pointRadius:2, borderWidth:1, borderDash:[4,4] }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:cd.legendColor,font:{size:11}}}, tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt$(ctx.raw)}`}} },
+      scales:{ x:{ticks:{color:cd.tickColor,font:{size:10}},grid:{display:false}},
+               y:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Holiday vs regular */
+  const holDates = D.holidays.map(h=>h.name.replace(" (observed)",""));
+  destroyChart('hol-vs-reg');
+  charts['hol-vs-reg'] = new Chart(document.getElementById('chart-hol-vs-reg'), {
+    type: 'bar',
+    data: { labels: [...holDates, 'Regular Day Avg'], datasets:[{
+      data:[...D.holidays.map(h=>h.revenue), D.holiday_summary.regular_avg_daily],
+      backgroundColor:[...D.holidays.map(()=>cssVar('--c1')), cssVar('--c5')], borderRadius:5
+    }]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.raw)}`}}},
+      scales:{ x:{ticks:{color:cd.tickColor,font:{size:10}},grid:{display:false}},
+               y:{min:1600,ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Holiday meal */
+  destroyChart('hol-meal');
+  charts['hol-meal'] = new Chart(document.getElementById('chart-hol-meal'), {
+    type: 'bar',
+    data: { labels:['Lunch','Dinner'], datasets:[
+      { label:'Holiday Avg', data:[Math.round(D.holiday_summary.holiday_avg_daily*.42), Math.round(D.holiday_summary.holiday_avg_daily*.58)], backgroundColor:cssVar('--c1'), borderRadius:5 },
+      { label:'Regular Avg', data:[Math.round(D.holiday_summary.regular_avg_daily*.58), Math.round(D.holiday_summary.regular_avg_daily*.42)], backgroundColor:cssVar('--c5'), borderRadius:5 }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:cd.legendColor,font:{size:12}}}, tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt$(ctx.raw)}`}} },
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+}
+
+function rebuildCharts() { buildCharts(); }
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  initHeader();
+  initKPIs();
+  initCuisineList();
+  initForecast();
+  initHourlyTable();
+  initTablesTable();
+  renderMenuTable(allMenu);
+  initMonthlyTable();
+  initDOWTable();
+  initFebKPIs();
+  initMondayKPIs();
+  initHolidayKPIs();
+  initHolidayTable();
+  buildCharts();
+});
+</script>
 </body>
 </html>
