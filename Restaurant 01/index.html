@@ -523,6 +523,53 @@ nav::-webkit-scrollbar { display: none; }
   body { background: #fff !important; }
   .card, .kpi-tile { box-shadow: none !important; border: 1px solid #ccc !important; }
 }
+
+  /* =========================================================
+     NARRATIVE BOX
+     ========================================================= */
+  .narrative-box {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    border-left: 4px solid var(--c1);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .narrative-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--c1);
+    margin-bottom: 10px;
+  }
+  .narrative-list {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .narrative-list li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .narrative-list li strong {
+    color: var(--text-primary);
+  }
+
+
+  .chart-click-note {
+    text-align: right;
+    font-size: 9pt;
+    font-weight: bold;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
 </style>
 </head>
 <body>
@@ -565,6 +612,11 @@ nav::-webkit-scrollbar { display: none; }
 <section class="tab-section active" id="tab-summary">
   <div class="data-flag" id="excl-flag"></div>
   <div class="section-head">KPI Overview — Q1 2023</div>
+  <div class="narrative-box">
+    <div class="narrative-title">📊 Key Insights</div>
+    <ul class="narrative-list"><li>The restaurant generated <strong>$160,783</strong> in total revenue across Q1 2023 (90 days), averaging <strong>$1,786/day</strong> and <strong>$29.96 per order</strong>.</li><li>With <strong>5,366 orders</strong> and <strong>12,218 items sold</strong>, customers ordered an average of <strong>2.28 items per visit</strong> — indicating strong upsell and combo performance.</li><li>Italian cuisine led revenue at <strong>31% share ($49,852)</strong>, followed by Asian at 29.3% — together accounting for over 60% of total revenue.</li><li>March was the strongest month at <strong>$55,997</strong>, while February — despite the fewest days — delivered the highest average daily revenue at <strong>$1,832/day</strong>.</li></ul>
+  </div>
+
 
   <div class="grid-4" id="kpi-tiles"></div>
 
@@ -578,6 +630,7 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:220px">
         <canvas id="chart-cuisine-pie"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -587,12 +640,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:260px">
         <canvas id="chart-top10-rev"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Menu Portfolio Distribution</div>
       <div class="chart-wrap" style="height:260px">
         <canvas id="chart-portfolio-pie"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -612,6 +667,11 @@ nav::-webkit-scrollbar { display: none; }
      ========================================================= -->
 <section class="tab-section" id="tab-daily">
   <div class="section-head">Daily &amp; Hourly Revenue — Q1 2023</div>
+  <div class="narrative-box">
+    <div class="narrative-title">📊 Key Insights</div>
+    <ul class="narrative-list"><li>Lunch dominates revenue at <strong>58% ($93,254)</strong> vs dinner at 42% ($67,529), with twin peaks at <strong>12:00 ($21,874)</strong> and <strong>19:00 ($21,120)</strong>.</li><li>The mid-afternoon trough (15:00–16:00, ~$7,280 combined) represents an underutilised window — a targeted afternoon promotion could recover incremental revenue.</li><li>Evening trade (18:00–21:00) accounts for approximately <strong>$72,720 (45%)</strong> of daily revenue, making dinner service operationally critical despite lower volume.</li><li>Revenue drops sharply after 22:00 ($1,476) — late-night trade contributes less than 1% of daily revenue and may not justify full staffing.</li></ul>
+  </div>
+
 
   <div class="grid-2">
     <div class="card">
@@ -619,12 +679,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:250px">
         <canvas id="chart-hourly-bar"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Orders by Hour of Day</div>
       <div class="chart-wrap" style="height:250px">
         <canvas id="chart-hourly-orders"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -634,12 +696,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-dow-bar"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Lunch vs Dinner — Q1 Total</div>
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-meal-doughnut"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -659,6 +723,11 @@ nav::-webkit-scrollbar { display: none; }
      ========================================================= -->
 <section class="tab-section" id="tab-tables">
   <div class="section-head">Revenue &amp; Orders by Table — Q1 2023</div>
+  <div class="narrative-box">
+    <div class="narrative-title">📊 Key Insights</div>
+    <ul class="narrative-list"><li>Table revenue is <strong>tightly clustered</strong> across all 15 tables, ranging from <strong>$10,310 (T15)</strong> to <strong>$11,852 (T14)</strong> — a spread of just $1,542.</li><li>T14 is the top-performing table at <strong>$11,852 revenue and 395 orders</strong>, suggesting it may benefit from superior placement, lighting, or server assignment.</li><li>T15 and T07 are the lowest performers by both revenue and orders — worth reviewing their positioning or service flow for improvement opportunities.</li><li>The narrow revenue spread across tables indicates <strong>consistent operational execution</strong> rather than table-driven variance, with performance driven more by time-of-day patterns.</li></ul>
+  </div>
+
 
   <div class="grid-2">
     <div class="card">
@@ -666,12 +735,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:280px">
         <canvas id="chart-table-rev"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Orders by Table</div>
       <div class="chart-wrap" style="height:280px">
         <canvas id="chart-table-orders"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -691,6 +762,11 @@ nav::-webkit-scrollbar { display: none; }
      ========================================================= -->
 <section class="tab-section" id="tab-menu">
   <div class="section-head">Menu Intelligence — Q1 2023</div>
+  <div class="narrative-box">
+    <div class="narrative-title">📊 Key Insights</div>
+    <ul class="narrative-list"><li><strong>Stars</strong> (high orders, high revenue) are led by Korean Beef Bowl ($13,022), Spaghetti & Meatballs ($12,438), and Hamburger ($9,557) — these 11 items are the revenue engine.</li><li><strong>Cash Cows</strong> (high revenue, lower volume) like Pork Ramen and Meat Lasagna generate strong per-item value and should be protected on the menu despite modest order counts.</li><li><strong>Workhorses</strong> — French Fries, Mac & Cheese, Chips & Salsa — are high-volume at low price points ($5–$7); they drive traffic and upsell opportunities but thin margins.</li><li><strong>Review/Remove candidates</strong> (14 items) include Shrimp Scampi, Cheese Lasagna, and Hot Dog — low orders and low revenue; consolidating this list could reduce kitchen complexity and food waste.</li></ul>
+  </div>
+
 
   <div class="grid-2">
     <div class="card">
@@ -698,12 +774,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:280px">
         <canvas id="chart-menu-rev"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Portfolio Quadrant — Item Count</div>
       <div class="chart-wrap" style="height:280px">
         <canvas id="chart-quadrant-pie"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -734,6 +812,11 @@ nav::-webkit-scrollbar { display: none; }
      ========================================================= -->
 <section class="tab-section" id="tab-trends">
   <div class="section-head">Trends — Q1 2023</div>
+  <div class="narrative-box">
+    <div class="narrative-title">📊 Key Insights</div>
+    <ul class="narrative-list"><li>Weekly revenue held in a <strong>narrow $11,870–$12,740 band</strong> across all 13 weeks, indicating stable and predictable demand without significant volatility.</li><li><strong>Week 11 ($12,740)</strong> was the peak week and <strong>Week 5 ($11,870)</strong> the trough — a difference of just 7%, pointing to a highly consistent operation.</li><li>March was the strongest month at <strong>$55,997</strong>, with Weeks 10–12 all above $12,290 — a late-Q1 momentum build that may reflect seasonal dining patterns.</li><li>The flat weekly trend suggests revenue growth will require deliberate intervention — new menu items, promotional events, or expanded capacity — rather than organic lift.</li></ul>
+  </div>
+
 
   <div class="grid-2">
     <div class="card">
@@ -741,12 +824,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-monthly-rev"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Avg Daily Revenue by Month</div>
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-monthly-avg"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -756,12 +841,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:220px">
         <canvas id="chart-weekly"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Lunch vs Dinner by Month</div>
       <div class="chart-wrap" style="height:220px">
         <canvas id="chart-meal-month"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -781,6 +868,11 @@ nav::-webkit-scrollbar { display: none; }
      ========================================================= -->
 <section class="tab-section" id="tab-feb">
   <div class="section-head">February 2023 Deep-Dive</div>
+  <div class="narrative-box">
+    <div class="narrative-title">📊 Key Insights</div>
+    <ul class="narrative-list"><li>Despite having the <strong>fewest days (28)</strong>, February achieved the <strong>highest average daily revenue at $1,832</strong> — outperforming January ($1,725) and March ($1,806).</li><li>February lunch revenue ($29,520) and dinner revenue ($21,776) both tracked closely to Q1 averages, suggesting no single daypart drove the outperformance — it was broad-based.</li><li>February hourly revenue exceeded the Q1 average at key peak hours (12:00: $22,400 vs $21,874; 19:00: $21,800 vs $21,120), amplifying the daily revenue advantage.</li><li>The February premium is likely driven by <strong>Valentine's Day</strong> (14 Feb) dining demand — a high-value event to plan proactively with set menus and reservation management in Q1 2024.</li></ul>
+  </div>
+
 
   <div class="grid-4" id="feb-kpis"></div>
 
@@ -790,12 +882,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:250px">
         <canvas id="chart-feb-hourly"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">February Lunch vs Dinner</div>
       <div class="chart-wrap" style="height:250px">
         <canvas id="chart-feb-meal"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 </section>
@@ -805,6 +899,11 @@ nav::-webkit-scrollbar { display: none; }
      ========================================================= -->
 <section class="tab-section" id="tab-segments">
   <div class="section-head">Day Segments — Q1 2023</div>
+  <div class="narrative-box">
+    <div class="narrative-title">📊 Key Insights</div>
+    <ul class="narrative-list"><li><strong>Monday is the strongest day</strong> at $2,017 avg daily revenue — 31% above Wednesday ($1,540), which is the weakest day of the week.</li><li>The mid-week trough (Wed–Thu) is a clear structural pattern: Wednesday ($1,540) and Thursday ($1,690) consistently underperform. Targeted mid-week promotions or events could close the gap.</li><li>Weekend performance is solid — Saturday ($1,960) and Sunday ($1,880) rank 2nd and 3rd — but neither surpasses Monday, suggesting weekday loyal regulars are the primary revenue driver.</li><li>Friday ($1,850) shows a modest pre-weekend lift but does not spike as sharply as might be expected, indicating the restaurant's customer base skews toward regular weekday diners over weekend occasion visitors.</li></ul>
+  </div>
+
 
   <div class="grid-2">
     <div class="card">
@@ -812,12 +911,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-seg-dow"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Weekday vs Weekend — Avg Daily Revenue</div>
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-seg-wkwkd"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -827,6 +928,7 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-seg-meal-dow"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Q1 Meal Period Summary</div>
@@ -839,7 +941,8 @@ nav::-webkit-scrollbar { display: none; }
           <div class="kpi-label">Dinner Revenue (42%)</div>
           <div class="kpi-value">$67,529</div>
         </div>
-      </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
+    </div>
     </div>
   </div>
 
@@ -868,12 +971,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-mon-vs-avg"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Hourly Revenue — All Days of Week</div>
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-all-dow-hourly"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
@@ -901,12 +1006,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-hol-vs-reg"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
     <div class="card">
       <div class="card-title">Holiday Meal Period Revenue</div>
       <div class="chart-wrap" style="height:230px">
         <canvas id="chart-hol-meal"></canvas>
       </div>
+      <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
 
