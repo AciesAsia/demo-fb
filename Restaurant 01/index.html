@@ -17,11 +17,11 @@ const DASHBOARD_DATA = {
     date_from:     "2023-01-01",
     date_to:       "2023-03-31",
     generated_date:"2026-08-18",
-    record_count:  12218,
+    record_count:  12217,
     excluded_rows: {
-      count: 16,
-      reason: "Null menu_item_id and null item_price",
-      order_ids: [125,147,161,200,201,1680,1747,1749,1792,1801,2710,4482,4498,5031,5099,5102]
+      count: 17,
+      reason: "Null menu_item_id and/or null item_price",
+      order_ids: [125,147,161,200,201,1680,1747,1749,1792,1801,2710,3527,4482,4498,5031,5099,5102]
     }
   },
 
@@ -30,7 +30,7 @@ const DASHBOARD_DATA = {
     avg_daily_revenue:    1786.47,
     avg_order_value:      29.96,
     total_orders:         5366,
-    total_items_sold:     12218,
+    total_items_sold:     12217,
     avg_items_per_order:  2.28,
     tables:               15,
     q1_days:              90
@@ -43,187 +43,207 @@ const DASHBOARD_DATA = {
     { name:"American", revenue:28561.65, share:17.8, items_sold:2765, avg_item_price:10.33, color:"#8A716A" }
   ],
 
-  // Estimated hourly revenue distribution from Section 2.6 — peak 12:00 $21,874, 13:00 $20,832
-  // Remaining revenue apportioned across typical restaurant bell curve
+  // Hourly revenue — computed from order_details.xlsx
   hourly: [
-    { hour:10, label:"10:00", revenue:1820,  orders:61  },
-    { hour:11, label:"11:00", revenue:6540,  orders:218 },
-    { hour:12, label:"12:00", revenue:21874, orders:730 },
-    { hour:13, label:"13:00", revenue:20832, orders:695 },
-    { hour:14, label:"14:00", revenue:9280,  orders:310 },
-    { hour:15, label:"15:00", revenue:4160,  orders:139 },
-    { hour:16, label:"16:00", revenue:3120,  orders:104 },
-    { hour:17, label:"17:00", revenue:8320,  orders:278 },
-    { hour:18, label:"18:00", revenue:18640, orders:622 },
-    { hour:19, label:"19:00", revenue:21120, orders:705 },
-    { hour:20, label:"20:00", revenue:19760, orders:659 },
-    { hour:21, label:"21:00", revenue:13200, orders:440 },
-    { hour:22, label:"22:00", revenue:5640,  orders:188 },
-    { hour:23, label:"23:00", revenue:1476,  orders:49  }
+    { hour:10, label:"10:00", revenue:63,    orders:2   },
+    { hour:11, label:"11:00", revenue:8189,  orders:288 },
+    { hour:12, label:"12:00", revenue:21874, orders:647 },
+    { hour:13, label:"13:00", revenue:20832, orders:594 },
+    { hour:14, label:"14:00", revenue:12757, orders:425 },
+    { hour:15, label:"15:00", revenue:9906,  orders:357 },
+    { hour:16, label:"16:00", revenue:13883, orders:480 },
+    { hour:17, label:"17:00", revenue:18039, orders:623 },
+    { hour:18, label:"18:00", revenue:17082, orders:596 },
+    { hour:19, label:"19:00", revenue:14337, orders:498 },
+    { hour:20, label:"20:00", revenue:11750, orders:412 },
+    { hour:21, label:"21:00", revenue:7829,  orders:289 },
+    { hour:22, label:"22:00", revenue:4083,  orders:151 },
+    { hour:23, label:"23:00", revenue:158,   orders:4   }
   ],
 
-  // Monthly breakdown derived from Section 2.6
-  // Feb avg daily $1,832 × 28d = ~$51,296; Jan & Mar make up remainder
+  // Monthly breakdown — computed from order_details.xlsx
   monthly: [
-    { month:"January",  month_short:"Jan", revenue:53490, orders:1784, avg_daily:1725, days:31 },
-    { month:"February", month_short:"Feb", revenue:51296, orders:1711, avg_daily:1832, days:28 },
-    { month:"March",    month_short:"Mar", revenue:55997, orders:1871, avg_daily:1806, days:31 }
+    { month:"January",  month_short:"Jan", revenue:54359.25, orders:1841, avg_daily:1753.52, days:31 },
+    { month:"February", month_short:"Feb", revenue:51300.35, orders:1685, avg_daily:1832.16, days:28 },
+    { month:"March",    month_short:"Mar", revenue:55122.95, orders:1840, avg_daily:1778.16, days:31 }
   ],
 
-  // Day-of-week averages — Monday best ($2,017), Wednesday worst ($1,540)
+  // Day-of-week averages — computed from order_details.xlsx
   dow: [
-    { day:"Monday",    day_short:"Mon", avg_daily_rev:2017, orders_avg:67 },
-    { day:"Tuesday",   day_short:"Tue", avg_daily_rev:1780, orders_avg:59 },
-    { day:"Wednesday", day_short:"Wed", avg_daily_rev:1540, orders_avg:51 },
-    { day:"Thursday",  day_short:"Thu", avg_daily_rev:1690, orders_avg:56 },
-    { day:"Friday",    day_short:"Fri", avg_daily_rev:1850, orders_avg:62 },
-    { day:"Saturday",  day_short:"Sat", avg_daily_rev:1960, orders_avg:65 },
-    { day:"Sunday",    day_short:"Sun", avg_daily_rev:1880, orders_avg:63 }
+    { day:"Monday",    day_short:"Mon", avg_daily_rev:2017, orders_avg:68 },
+    { day:"Tuesday",   day_short:"Tue", avg_daily_rev:1821, orders_avg:59 },
+    { day:"Wednesday", day_short:"Wed", avg_daily_rev:1540, orders_avg:52 },
+    { day:"Thursday",  day_short:"Thu", avg_daily_rev:1702, orders_avg:57 },
+    { day:"Friday",    day_short:"Fri", avg_daily_rev:1840, orders_avg:61 },
+    { day:"Saturday",  day_short:"Sat", avg_daily_rev:1783, orders_avg:59 },
+    { day:"Sunday",    day_short:"Sun", avg_daily_rev:1802, orders_avg:61 }
   ],
 
-  // Weekly revenue — 13 weeks Q1 2023
+  // Weekly revenue — computed from order_details.xlsx (Wk 1 = Jan 1–7, Wk 13 = Mar 26–31)
   weekly: [
-    { week:"Wk 1",  revenue:12100 },
-    { week:"Wk 2",  revenue:12450 },
-    { week:"Wk 3",  revenue:11980 },
-    { week:"Wk 4",  revenue:12340 },
-    { week:"Wk 5",  revenue:11870 },
-    { week:"Wk 6",  revenue:12680 },
-    { week:"Wk 7",  revenue:12120 },
-    { week:"Wk 8",  revenue:11950 },
-    { week:"Wk 9",  revenue:12420 },
-    { week:"Wk 10", revenue:12290 },
-    { week:"Wk 11", revenue:12740 },
-    { week:"Wk 12", revenue:12500 },
-    { week:"Wk 13", revenue:11342 }
+    { week:"Wk 1",  revenue:12645.70 },
+    { week:"Wk 2",  revenue:12217.30 },
+    { week:"Wk 3",  revenue:12002.70 },
+    { week:"Wk 4",  revenue:12259.95 },
+    { week:"Wk 5",  revenue:13385.75 },
+    { week:"Wk 6",  revenue:12545.55 },
+    { week:"Wk 7",  revenue:12489.00 },
+    { week:"Wk 8",  revenue:12026.45 },
+    { week:"Wk 9",  revenue:12941.25 },
+    { week:"Wk 10", revenue:12724.35 },
+    { week:"Wk 11", revenue:12997.65 },
+    { week:"Wk 12", revenue:11452.65 },
+    { week:"Wk 13", revenue:11094.25 }
   ],
 
-  // Meal period splits — lunch dominates per Section 2.6
+  // Meal period splits — computed from order_details.xlsx
+  // Lunch = 10:00–15:59, Dinner = 16:00–23:59
   meal_periods: {
-    lunch_pct:  58,
-    dinner_pct: 42,
-    lunch_rev:  93254,
-    dinner_rev: 67529
+    lunch_pct:  45.8,
+    dinner_pct: 54.2,
+    lunch_rev:  73621.15,
+    dinner_rev: 87161.40
   },
 
-  // Monthly lunch vs dinner
+  // Monthly lunch vs dinner — computed from order_details.xlsx
   meal_by_month: [
-    { month:"Jan", lunch:30980, dinner:22510 },
-    { month:"Feb", lunch:29520, dinner:21776 },
-    { month:"Mar", lunch:32754, dinner:23243 }
+    { month:"Jan", lunch:24895.50, dinner:29463.75 },
+    { month:"Feb", lunch:23518.15, dinner:27782.20 },
+    { month:"Mar", lunch:25207.50, dinner:29915.45 }
   ],
 
-  // Table revenue — T14 top $11,852, T15 bottom end per finding; spread $10,147–$11,852
+  // Cuisine revenue by month — computed from order_details.xlsx
+  cuisine_by_month: [
+    { month:"Jan", Italian:16882.95, Asian:15753.70, Mexican:12301.55, American:9421.05 },
+    { month:"Feb", Italian:15657.90, Asian:15249.85, Mexican:11349.60, American:9043.00 },
+    { month:"Mar", Italian:17310.65, Asian:16184.75, Mexican:11529.95, American:10097.60 }
+  ],
+
+  // Table revenue — T14 top $11,851.50, T15 lowest — computed from order_details.xlsx
   tables: [
-    { table_id:"T01", revenue:10820, orders:361 },
-    { table_id:"T02", revenue:10950, orders:365 },
-    { table_id:"T03", revenue:11240, orders:375 },
-    { table_id:"T04", revenue:10610, orders:354 },
-    { table_id:"T05", revenue:10780, orders:359 },
-    { table_id:"T06", revenue:11120, orders:371 },
-    { table_id:"T07", revenue:10490, orders:350 },
-    { table_id:"T08", revenue:11380, orders:379 },
-    { table_id:"T09", revenue:10660, orders:355 },
-    { table_id:"T10", revenue:10920, orders:364 },
-    { table_id:"T11", revenue:11050, orders:368 },
-    { table_id:"T12", revenue:10750, orders:358 },
-    { table_id:"T13", revenue:10850, orders:362 },
-    { table_id:"T14", revenue:11852, orders:395 },
-    { table_id:"T15", revenue:10310, orders:344 }
+    { table_id:"T01", revenue:10534.50, orders:350 },
+    { table_id:"T02", revenue:11333.20, orders:354 },
+    { table_id:"T03", revenue:11052.05, orders:370 },
+    { table_id:"T04", revenue:10502.45, orders:323 },
+    { table_id:"T05", revenue:10602.60, orders:344 },
+    { table_id:"T06", revenue:10427.40, orders:359 },
+    { table_id:"T07", revenue:10817.15, orders:377 },
+    { table_id:"T08", revenue:10391.35, orders:345 },
+    { table_id:"T09", revenue:10400.60, orders:364 },
+    { table_id:"T10", revenue:10410.85, orders:359 },
+    { table_id:"T11", revenue:10355.35, orders:368 },
+    { table_id:"T12", revenue:10690.55, orders:363 },
+    { table_id:"T13", revenue:11266.50, orders:376 },
+    { table_id:"T14", revenue:11851.50, orders:377 },
+    { table_id:"T15", revenue:10146.50, orders:337 }
   ],
 
-  // Menu items with quadrant classification from Section 2.6
+  // Menu items with quadrant classification — orders and revenue computed from order_details.xlsx
   menu_items: [
-    // Stars
-    { id:109, name:"Korean Beef Bowl",      cuisine:"Asian",    price:17.95, quadrant:"Star",       orders:726, revenue:13022 },
-    { id:125, name:"Spaghetti & Meatballs", cuisine:"Italian",  price:17.95, quadrant:"Star",       orders:693, revenue:12438 },
-    { id:108, name:"Tofu Pad Thai",         cuisine:"Asian",    price:14.50, quadrant:"Star",       orders:619, revenue:8976 },
-    { id:102, name:"Cheeseburger",          cuisine:"American", price:13.95, quadrant:"Star",       orders:580, revenue:8091 },
-    { id:101, name:"Hamburger",             cuisine:"American", price:12.95, quadrant:"Star",       orders:738, revenue:9557 },
-    { id:107, name:"Orange Chicken",        cuisine:"Asian",    price:16.50, quadrant:"Star",       orders:612, revenue:10098 },
-    { id:132, name:"Eggplant Parmesan",     cuisine:"Italian",  price:16.95, quadrant:"Star",       orders:488, revenue:8272 },
-    { id:120, name:"Steak Torta",           cuisine:"Mexican",  price:13.95, quadrant:"Star",       orders:512, revenue:7142 },
-    { id:131, name:"Chicken Parmesan",      cuisine:"Italian",  price:17.95, quadrant:"Star",       orders:501, revenue:8993 },
-    { id:124, name:"Spaghetti",             cuisine:"Italian",  price:14.50, quadrant:"Star",       orders:490, revenue:7105 },
-    { id:117, name:"Chicken Burrito",       cuisine:"Mexican",  price:12.95, quadrant:"Star",       orders:488, revenue:6320 },
-    // Cash Cows
-    { id:110, name:"Pork Ramen",            cuisine:"Asian",    price:17.95, quadrant:"Cash Cow",   orders:320, revenue:5744 },
-    { id:129, name:"Mushroom Ravioli",      cuisine:"Italian",  price:15.50, quadrant:"Cash Cow",   orders:290, revenue:4495 },
-    { id:118, name:"Steak Burrito",         cuisine:"Mexican",  price:14.95, quadrant:"Cash Cow",   orders:305, revenue:4560 },
-    { id:127, name:"Meat Lasagna",          cuisine:"Italian",  price:17.95, quadrant:"Cash Cow",   orders:275, revenue:4936 },
-    { id:112, name:"Salmon Roll",           cuisine:"Asian",    price:14.95, quadrant:"Cash Cow",   orders:260, revenue:3887 },
-    // Workhorses
-    { id:106, name:"French Fries",          cuisine:"American", price: 7.00, quadrant:"Workhorse",  orders:634, revenue:4438 },
-    { id:105, name:"Mac & Cheese",          cuisine:"American", price: 7.00, quadrant:"Workhorse",  orders:634, revenue:4438 },
-    { id:122, name:"Chips & Salsa",         cuisine:"Mexican",  price: 7.00, quadrant:"Workhorse",  orders:580, revenue:4060 },
-    { id:113, name:"Edamame",               cuisine:"Asian",    price: 5.00, quadrant:"Workhorse",  orders:520, revenue:2600 },
-    { id:119, name:"Chicken Torta",         cuisine:"Mexican",  price:11.95, quadrant:"Workhorse",  orders:460, revenue:5497 },
-    // Review / Remove
-    { id:115, name:"Chicken Tacos",         cuisine:"Mexican",  price:11.95, quadrant:"Review",     orders:180, revenue:2151 },
-    { id:126, name:"Fettuccine Alfredo",    cuisine:"Italian",  price:14.50, quadrant:"Review",     orders:200, revenue:2900 },
-    { id:114, name:"Potstickers",           cuisine:"Asian",    price: 9.00, quadrant:"Review",     orders:190, revenue:1710 },
-    { id:128, name:"Cheese Lasagna",        cuisine:"Italian",  price:15.50, quadrant:"Review",     orders:175, revenue:2713 },
-    { id:116, name:"Steak Tacos",           cuisine:"Mexican",  price:13.95, quadrant:"Review",     orders:165, revenue:2302 },
-    { id:121, name:"Cheese Quesadillas",    cuisine:"Mexican",  price:10.50, quadrant:"Review",     orders:160, revenue:1680 },
-    { id:123, name:"Chips & Guacamole",     cuisine:"Mexican",  price: 9.00, quadrant:"Review",     orders:155, revenue:1395 },
-    { id:104, name:"Veggie Burger",         cuisine:"American", price:10.50, quadrant:"Review",     orders:148, revenue:1554 },
-    { id:103, name:"Hot Dog",               cuisine:"American", price: 9.00, quadrant:"Review",     orders:142, revenue:1278 },
-    { id:111, name:"California Roll",       cuisine:"Asian",    price:11.95, quadrant:"Review",     orders:138, revenue:1649 },
-    { id:130, name:"Shrimp Scampi",         cuisine:"Italian",  price:19.95, quadrant:"Review",     orders:130, revenue:2594 }
+    // Stars — high revenue AND high orders
+    { id:109, name:"Korean Beef Bowl",      cuisine:"Asian",    price:17.95, quadrant:"Star",       orders:592, revenue:10626.40 },
+    { id:125, name:"Spaghetti & Meatballs", cuisine:"Italian",  price:17.95, quadrant:"Star",       orders:474, revenue:8508.30  },
+    { id:108, name:"Tofu Pad Thai",         cuisine:"Asian",    price:14.50, quadrant:"Star",       orders:569, revenue:8250.50  },
+    { id:102, name:"Cheeseburger",          cuisine:"American", price:13.95, quadrant:"Star",       orders:588, revenue:8202.60  },
+    { id:101, name:"Hamburger",             cuisine:"American", price:12.95, quadrant:"Star",       orders:629, revenue:8145.55  },
+    { id:107, name:"Orange Chicken",        cuisine:"Asian",    price:16.50, quadrant:"Star",       orders:460, revenue:7590.00  },
+    { id:132, name:"Eggplant Parmesan",     cuisine:"Italian",  price:16.95, quadrant:"Star",       orders:422, revenue:7152.90  },
+    { id:120, name:"Steak Torta",           cuisine:"Mexican",  price:13.95, quadrant:"Star",       orders:491, revenue:6849.45  },
+    { id:131, name:"Chicken Parmesan",      cuisine:"Italian",  price:17.95, quadrant:"Star",       orders:368, revenue:6605.60  },
+    { id:124, name:"Spaghetti",             cuisine:"Italian",  price:14.50, quadrant:"Star",       orders:370, revenue:5365.00  },
+    { id:117, name:"Chicken Burrito",       cuisine:"Mexican",  price:12.95, quadrant:"Star",       orders:459, revenue:5944.05  },
+    // Cash Cows — high revenue, lower order volume
+    { id:110, name:"Pork Ramen",            cuisine:"Asian",    price:17.95, quadrant:"Cash Cow",   orders:364, revenue:6533.80  },
+    { id:129, name:"Mushroom Ravioli",      cuisine:"Italian",  price:15.50, quadrant:"Cash Cow",   orders:361, revenue:5595.50  },
+    { id:118, name:"Steak Burrito",         cuisine:"Mexican",  price:14.95, quadrant:"Cash Cow",   orders:361, revenue:5396.95  },
+    { id:127, name:"Meat Lasagna",          cuisine:"Italian",  price:17.95, quadrant:"Cash Cow",   orders:275, revenue:4936.25  },
+    { id:112, name:"Salmon Roll",           cuisine:"Asian",    price:14.95, quadrant:"Cash Cow",   orders:326, revenue:4873.70  },
+    // Workhorses — high order volume, lower price
+    { id:113, name:"Edamame",               cuisine:"Asian",    price: 5.00, quadrant:"Workhorse",  orders:625, revenue:3125.00  },
+    { id:106, name:"French Fries",          cuisine:"American", price: 7.00, quadrant:"Workhorse",  orders:576, revenue:4032.00  },
+    { id:105, name:"Mac & Cheese",          cuisine:"American", price: 7.00, quadrant:"Workhorse",  orders:467, revenue:3269.00  },
+    { id:122, name:"Chips & Salsa",         cuisine:"Mexican",  price: 7.00, quadrant:"Workhorse",  orders:465, revenue:3260.95  },
+    { id:119, name:"Chicken Torta",         cuisine:"Mexican",  price:11.95, quadrant:"Workhorse",  orders:383, revenue:4576.85  },
+    // Review / Remove — low relative performance
+    { id:130, name:"Shrimp Scampi",         cuisine:"Italian",  price:19.95, quadrant:"Review",     orders:241, revenue:4807.95  },
+    { id:111, name:"California Roll",       cuisine:"Asian",    price:11.95, quadrant:"Review",     orders:362, revenue:4325.90  },
+    { id:126, name:"Fettuccine Alfredo",    cuisine:"Italian",  price:14.50, quadrant:"Review",     orders:250, revenue:3625.00  },
+    { id:128, name:"Cheese Lasagna",        cuisine:"Italian",  price:15.50, quadrant:"Review",     orders:210, revenue:3255.00  },
+    { id:116, name:"Steak Tacos",           cuisine:"Mexican",  price:13.95, quadrant:"Review",     orders:218, revenue:3041.10  },
+    { id:104, name:"Veggie Burger",         cuisine:"American", price:10.50, quadrant:"Review",     orders:245, revenue:2572.50  },
+    { id:121, name:"Cheese Quesadillas",    cuisine:"Mexican",  price:10.50, quadrant:"Review",     orders:235, revenue:2469.95  },
+    { id:103, name:"Hot Dog",               cuisine:"American", price: 9.00, quadrant:"Review",     orders:260, revenue:2340.00  },
+    { id:123, name:"Chips & Guacamole",     cuisine:"Mexican",  price: 9.00, quadrant:"Review",     orders:240, revenue:2160.00  },
+    { id:114, name:"Potstickers",           cuisine:"Asian",    price: 9.00, quadrant:"Review",     orders:207, revenue:1863.00  },
+    { id:115, name:"Chicken Tacos",         cuisine:"Mexican",  price:11.95, quadrant:"Review",     orders:124, revenue:1481.80  }
   ],
 
-  // Q1 2023 US Holidays — 4 fall in Q1
+  // Q1 2023 US Holidays — 4 fall in Q1 (computed from order_details.xlsx)
   holidays: [
-    { date:"2023-01-02", name:"New Year's Day (observed)", revenue:2180, orders:73 },
-    { date:"2023-01-16", name:"Martin Luther King Jr. Day", revenue:2095, orders:70 },
-    { date:"2023-02-20", name:"Presidents' Day",            revenue:2010, orders:67 },
-    { date:"2023-01-01", name:"New Year's Day",             revenue:2015, orders:67 }
+    { date:"2023-01-01", name:"New Year's Day",              revenue:2098.60, orders:69 },
+    { date:"2023-01-02", name:"New Year's Day (observed)",   revenue:1994.70, orders:66 },
+    { date:"2023-01-16", name:"Martin Luther King Jr. Day",  revenue:2042.25, orders:67 },
+    { date:"2023-02-20", name:"Presidents' Day",             revenue:2165.50, orders:73 }
   ],
+
+  // Holiday meal splits — computed from order_details.xlsx
+  // Holiday: 45.3% Lunch / 54.7% Dinner  |  Regular: 45.8% Lunch / 54.2% Dinner
+  holiday_meal: {
+    holiday_lunch_pct:  45.3,
+    holiday_dinner_pct: 54.7,
+    regular_lunch_pct:  45.8,
+    regular_dinner_pct: 54.2
+  },
 
   holiday_summary: {
-    holiday_avg_daily:  2075,
-    regular_avg_daily:  1773,
-    pct_above_regular:  17,
-    holiday_dinner_per_table: 67.74
+    holiday_avg_daily:       2075.26,
+    regular_avg_daily:       1773.04,
+    pct_above_regular:       17,
+    holiday_dinner_per_table: 75.70
   },
 
-  // February deep-dive data
+  // February deep-dive data — computed from order_details.xlsx
   february: {
-    avg_daily_rev: 1832,
-    lunch_rev: 29520,
-    dinner_rev: 21776,
+    avg_daily_rev: 1832.16,
+    lunch_rev:     23518.15,
+    dinner_rev:    27782.20,
+    orders:        1685,
+    // feb = total February revenue per hour; q1_avg = Q1 total hourly revenue
+    // Both are Q1/Feb totals — computed from order_details.xlsx
     hourly_vs_q1_delta: [
-      { label:"10:00", feb:1750, q1_avg:1820 },
-      { label:"11:00", feb:6200, q1_avg:6540 },
-      { label:"12:00", feb:22400, q1_avg:21874 },
-      { label:"13:00", feb:21100, q1_avg:20832 },
-      { label:"14:00", feb:9100,  q1_avg:9280 },
-      { label:"15:00", feb:3900,  q1_avg:4160 },
-      { label:"16:00", feb:3200,  q1_avg:3120 },
-      { label:"17:00", feb:8600,  q1_avg:8320 },
-      { label:"18:00", feb:19200, q1_avg:18640 },
-      { label:"19:00", feb:21800, q1_avg:21120 },
-      { label:"20:00", feb:20100, q1_avg:19760 },
-      { label:"21:00", feb:13600, q1_avg:13200 },
-      { label:"22:00", feb:5200,  q1_avg:5640 }
+      { label:"10:00", feb:29.90,   q1_avg:63.35    },
+      { label:"11:00", feb:3028.30, q1_avg:8188.80  },
+      { label:"12:00", feb:6591.70, q1_avg:21874.25 },
+      { label:"13:00", feb:6236.10, q1_avg:20832.20 },
+      { label:"14:00", feb:4309.35, q1_avg:12756.85 },
+      { label:"15:00", feb:3322.80, q1_avg:9905.70  },
+      { label:"16:00", feb:3805.00, q1_avg:13883.35 },
+      { label:"17:00", feb:6063.80, q1_avg:18039.05 },
+      { label:"18:00", feb:5231.00, q1_avg:17082.05 },
+      { label:"19:00", feb:4434.85, q1_avg:14337.25 },
+      { label:"20:00", feb:3687.75, q1_avg:11750.00 },
+      { label:"21:00", feb:3063.65, q1_avg:7829.20  },
+      { label:"22:00", feb:1412.25, q1_avg:4082.70  },
+      { label:"23:00", feb:83.90,   q1_avg:157.80   }
     ]
   },
 
   // Monday deep-dive
   monday: {
     avg_daily_rev: 2017,
-    weekday_avg:   1770,
+    weekday_avg:   1784,
     peak_period:   "Dinner 18:00–20:00",
     driver:        "Volume, not average spend"
   },
 
-  // Forecast Q2 2023 (top 5 by order volume)
+  // Q1 2023 top 5 by order volume — used as Q2 baseline forecast
+  // Computed from order_details.xlsx
   q2_forecast: [
-    { rank:1, name:"Hamburger",        forecast_orders:738 },
-    { rank:2, name:"Korean Beef Bowl", forecast_orders:726 },
-    { rank:3, name:"French Fries",     forecast_orders:634 },
-    { rank:4, name:"Mac and Cheese",   forecast_orders:634 },
-    { rank:5, name:"Tofu Pad Thai",    forecast_orders:619 }
+    { rank:1, name:"Hamburger",        forecast_orders:629 },
+    { rank:2, name:"Edamame",          forecast_orders:625 },
+    { rank:3, name:"Korean Beef Bowl", forecast_orders:592 },
+    { rank:4, name:"Cheeseburger",     forecast_orders:588 },
+    { rank:5, name:"French Fries",     forecast_orders:576 }
   ]
 
 };
@@ -576,7 +596,6 @@ nav::-webkit-scrollbar { display: none; }
 
 <!-- ====================================================
      PASSWORD PROTECTION OVERLAY
-     Password: RD0818@ph!
      ==================================================== -->
 <div id="pw-overlay" style="
   position:fixed;inset:0;z-index:99999;
@@ -587,7 +606,7 @@ nav::-webkit-scrollbar { display: none; }
     background:#fff;border-radius:16px;padding:48px 40px;
     width:340px;box-shadow:0 24px 64px rgba(0,0,0,.45);
     display:flex;flex-direction:column;align-items:center;gap:20px;">
-    <img src="https://i.imgur.com/placeholder.png"
+    <img src=""
          onerror="this.style.display='none'"
          style="height:48px;margin-bottom:4px;" alt="">
     <div style="text-align:center;">
@@ -598,7 +617,8 @@ nav::-webkit-scrollbar { display: none; }
         Demo Dashboard
       </div>
     </div>
-    <div style="width:100%;display:flex;flex-direction:column;gap:8px;">
+    <!-- PANEL A: Login -->
+    <div id="pw-panel-login" style="width:100%;display:flex;flex-direction:column;gap:8px;">
       <label style="font-size:12px;font-weight:600;color:#374151;letter-spacing:.4px;text-transform:uppercase;">
         Password
       </label>
@@ -616,61 +636,261 @@ nav::-webkit-scrollbar { display: none; }
                  background:none;border:none;cursor:pointer;color:#9ca3af;font-size:16px;
                  padding:0;line-height:1;" title="Show/hide password">👁</button>
       </div>
-      <div id="pw-error" style="
-        font-size:12px;color:#dc2626;min-height:16px;display:none;">
+      <div id="pw-error" style="font-size:12px;color:#dc2626;min-height:16px;display:none;">
         Incorrect password. Please try again.
       </div>
+      <button onclick="pwUnlock()"
+        style="width:100%;padding:12px;background:#197BBD;color:#fff;
+               border:none;border-radius:8px;font-size:15px;font-weight:600;
+               cursor:pointer;letter-spacing:.2px;transition:background .2s;margin-top:4px;"
+        onmouseover="this.style.background='#125E8A'"
+        onmouseout="this.style.background='#197BBD'">
+        Unlock Dashboard
+      </button>
+      <div style="text-align:center;margin-top:2px;">
+        <button onclick="pwShowReset()"
+          style="background:none;border:none;color:#197BBD;font-size:12px;
+                 cursor:pointer;text-decoration:underline;padding:0;">
+          Reset Password
+        </button>
+      </div>
     </div>
-    <button onclick="pwUnlock()"
-      style="width:100%;padding:12px;background:#197BBD;color:#fff;
-             border:none;border-radius:8px;font-size:15px;font-weight:600;
-             cursor:pointer;letter-spacing:.2px;transition:background .2s;"
-      onmouseover="this.style.background='#125E8A'"
-      onmouseout="this.style.background='#197BBD'">
-      Unlock Dashboard
-    </button>
-    <div style="font-size:11px;color:#9ca3af;text-align:center;line-height:1.5;">
-      ---
+
+    <!-- PANEL B: Reset — enter registered email -->
+    <div id="pw-panel-email" style="width:100%;display:none;flex-direction:column;gap:8px;">
+      <div style="font-size:13px;color:#374151;font-weight:600;text-align:center;margin-bottom:2px;">
+        Reset Password
+      </div>
+      <div style="font-size:12px;color:#64748b;text-align:center;margin-bottom:6px;">
+        Enter the registered account email address.
+      </div>
+      <label style="font-size:12px;font-weight:600;color:#374151;letter-spacing:.4px;text-transform:uppercase;">
+        Email Address
+      </label>
+      <input id="pw-reset-email" type="email" placeholder="Enter registered email"
+        autocomplete="email" spellcheck="false"
+        style="width:100%;box-sizing:border-box;padding:11px 14px;
+               border:1.5px solid #d1d5db;border-radius:8px;font-size:15px;
+               outline:none;transition:border-color .2s;color:#111;background:#fafafa;"
+        onfocus="this.style.borderColor='#197BBD'"
+        onblur="this.style.borderColor='#d1d5db'"
+        onkeydown="if(event.key==='Enter')pwCheckEmail()">
+      <div id="pw-email-error" style="font-size:12px;color:#dc2626;min-height:16px;display:none;">
+        Email not recognised. Please try again.
+      </div>
+      <button onclick="pwCheckEmail()"
+        style="width:100%;padding:12px;background:#197BBD;color:#fff;
+               border:none;border-radius:8px;font-size:15px;font-weight:600;
+               cursor:pointer;letter-spacing:.2px;transition:background .2s;margin-top:4px;"
+        onmouseover="this.style.background='#125E8A'"
+        onmouseout="this.style.background='#197BBD'">
+        Continue
+      </button>
+      <div style="text-align:center;margin-top:2px;">
+        <button onclick="pwShowLogin()"
+          style="background:none;border:none;color:#197BBD;font-size:12px;
+                 cursor:pointer;text-decoration:underline;padding:0;">
+          ← Back to Login
+        </button>
+      </div>
     </div>
+
+    <!-- PANEL C: Reset — set new password -->
+    <div id="pw-panel-newpw" style="width:100%;display:none;flex-direction:column;gap:8px;">
+      <div style="font-size:13px;color:#374151;font-weight:600;text-align:center;margin-bottom:2px;">
+        Set New Password
+      </div>
+      <div style="font-size:12px;color:#64748b;text-align:center;margin-bottom:6px;">
+        Maximum 10 characters.
+      </div>
+      <label style="font-size:12px;font-weight:600;color:#374151;letter-spacing:.4px;text-transform:uppercase;">
+        New Password
+      </label>
+      <div style="position:relative;">
+        <input id="pw-new-input" type="password" placeholder="Enter new password"
+          autocomplete="new-password" spellcheck="false" maxlength="10"
+          style="width:100%;box-sizing:border-box;padding:11px 42px 11px 14px;
+                 border:1.5px solid #d1d5db;border-radius:8px;font-size:15px;
+                 outline:none;transition:border-color .2s;color:#111;background:#fafafa;"
+          onfocus="this.style.borderColor='#197BBD'"
+          onblur="this.style.borderColor='#d1d5db'"
+          onkeydown="if(event.key==='Enter')pwSetNew()">
+        <button onclick="pwToggleNew()" tabindex="-1"
+          style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
+                 background:none;border:none;cursor:pointer;color:#9ca3af;font-size:16px;
+                 padding:0;line-height:1;" title="Show/hide password">👁</button>
+      </div>
+      <div id="pw-newpw-error" style="font-size:12px;color:#dc2626;min-height:16px;display:none;">
+        Password must be 1–10 characters.
+      </div>
+      <button onclick="pwSetNew()"
+        style="width:100%;padding:12px;background:#0ca30c;color:#fff;
+               border:none;border-radius:8px;font-size:15px;font-weight:600;
+               cursor:pointer;letter-spacing:.2px;transition:background .2s;margin-top:4px;"
+        onmouseover="this.style.background='#087a08'"
+        onmouseout="this.style.background='#0ca30c'">
+        Set Password &amp; Unlock
+      </button>
+      <div style="text-align:center;margin-top:2px;">
+        <button onclick="pwShowLogin()"
+          style="background:none;border:none;color:#197BBD;font-size:12px;
+                 cursor:pointer;text-decoration:underline;padding:0;">
+          ← Back to Login
+        </button>
+      </div>
+    </div>
+
+    <!-- PANEL D: Reset success — show new hash -->
+    <div id="pw-panel-done" style="width:100%;display:none;flex-direction:column;gap:10px;">
+      <div style="font-size:13px;color:#0ca30c;font-weight:700;text-align:center;">
+        ✓ Password Reset — Dashboard Unlocked
+      </div>
+      <div style="font-size:12px;color:#374151;line-height:1.6;">
+        Your session is now active. This new password applies to this browser session only.
+        To make it permanent, share the hash below with your administrator to update the file.
+      </div>
+      <div style="font-size:11px;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:.4px;">
+        New SHA-256 Hash
+      </div>
+      <div id="pw-new-hash"
+        style="font-size:11px;font-family:monospace;word-break:break-all;
+               background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;
+               padding:10px 12px;color:#0d1b2a;line-height:1.5;">
+      </div>
+      <button onclick="pwDismissOverlay()"
+        style="width:100%;padding:12px;background:#197BBD;color:#fff;
+               border:none;border-radius:8px;font-size:15px;font-weight:600;
+               cursor:pointer;letter-spacing:.2px;transition:background .2s;"
+        onmouseover="this.style.background='#125E8A'"
+        onmouseout="this.style.background='#197BBD'">
+        Go to Dashboard
+      </button>
+    </div>
+
   </div>
 </div>
 
 <script>
 (function(){
-  // Hash of password "RD0818@ph!" using SubtleCrypto
-  const HASH = "9b2c1f4d8e6a3c7b5f0d2e9a1b4c8f3e6d7a2b5c9e0f1d4a7b3c6e8f2d5a9b1";
-  // Fallback plain comparison (obfuscated)
-  const _p = atob("UkQwODE4QHBoIQ==");
+  // Password verified via SHA-256 (SubtleCrypto) — no plaintext stored
+  const HASH = "845e26affe57dadb7236eaee8cfaffce0a90fa5ff42755686e4c81f6d151a577";
 
-  const SESSION_KEY = "rd_auth_ts";
-  const TIMEOUT_MS  = 3.5 * 60 * 1000; // 3.5 minutes
+  const SESSION_KEY = "rd_auth";
 
-  function pwShowOverlay() {
-    let ol = document.getElementById("pw-overlay");
-    if (ol) { ol.style.opacity = "1"; ol.style.display = "flex"; return; }
-    // Overlay was already removed — rebuild it
-    const el = document.createElement("div");
-    el.id = "pw-overlay";
-    el.innerHTML = document.getElementById("pw-overlay-template").innerHTML;
-    el.style.cssText = "position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0d1b2a 0%,#1a3550 100%);font-family:'Segoe UI',system-ui,sans-serif;";
-    document.body.prepend(el);
+  // Registered user for password reset (checked client-side only)
+  const RESET_EMAIL = "nzb@bito.com.ph";
+
+  // Runtime hash — may be replaced by a reset in this session
+  let activeHash = HASH;
+
+  /* ---- Panel switching ---- */
+  function pwShowPanel(id) {
+    ["pw-panel-login","pw-panel-email","pw-panel-newpw","pw-panel-done"].forEach(function(p){
+      const el = document.getElementById(p);
+      if (el) el.style.display = (p === id) ? "flex" : "none";
+    });
   }
 
-  function pwUnlock() {
-    const v = document.getElementById("pw-input").value;
-    const err = document.getElementById("pw-error");
-    if (v === _p) {
-      const ol = document.getElementById("pw-overlay");
-      ol.style.opacity = "0";
-      ol.style.transition = "opacity .4s";
-      setTimeout(() => { ol.style.display = "none"; }, 420);
-      try { sessionStorage.setItem(SESSION_KEY, Date.now().toString()); } catch(e){}
-      startTimeoutWatcher();
+  function pwShowLogin() {
+    document.getElementById("pw-reset-email").value = "";
+    document.getElementById("pw-email-error").style.display = "none";
+    document.getElementById("pw-new-input").value = "";
+    document.getElementById("pw-newpw-error").style.display = "none";
+    pwShowPanel("pw-panel-login");
+  }
+
+  function pwShowReset() {
+    document.getElementById("pw-reset-email").value = "";
+    document.getElementById("pw-email-error").style.display = "none";
+    pwShowPanel("pw-panel-email");
+    setTimeout(function(){ document.getElementById("pw-reset-email").focus(); }, 50);
+  }
+
+  function pwShowOverlay() {
+    const ol = document.getElementById("pw-overlay");
+    if (ol) { ol.style.opacity = "1"; ol.style.display = "flex"; }
+    pwShowPanel("pw-panel-login");
+  }
+
+  function pwDismissOverlay() {
+    const ol = document.getElementById("pw-overlay");
+    ol.style.opacity = "0";
+    ol.style.transition = "opacity .4s";
+    setTimeout(function(){ ol.style.display = "none"; }, 420);
+  }
+
+  /* ---- Reset: check email ---- */
+  function pwCheckEmail() {
+    const val = document.getElementById("pw-reset-email").value.trim().toLowerCase();
+    const err = document.getElementById("pw-email-error");
+    if (val === RESET_EMAIL) {
+      err.style.display = "none";
+      document.getElementById("pw-reset-email").style.borderColor = "#d1d5db";
+      document.getElementById("pw-new-input").value = "";
+      document.getElementById("pw-newpw-error").style.display = "none";
+      pwShowPanel("pw-panel-newpw");
+      setTimeout(function(){ document.getElementById("pw-new-input").focus(); }, 50);
     } else {
       err.style.display = "block";
-      document.getElementById("pw-input").style.borderColor = "#dc2626";
-      setTimeout(() => { err.style.display = "none";
-        document.getElementById("pw-input").style.borderColor = "#d1d5db"; }, 2800);
+      document.getElementById("pw-reset-email").style.borderColor = "#dc2626";
+      setTimeout(function(){
+        err.style.display = "none";
+        document.getElementById("pw-reset-email").style.borderColor = "#d1d5db";
+      }, 2800);
+    }
+  }
+
+  /* ---- Reset: set new password ---- */
+  async function pwSetNew() {
+    const v = document.getElementById("pw-new-input").value;
+    const err = document.getElementById("pw-newpw-error");
+    if (!v || v.length > 10) {
+      err.style.display = "block";
+      document.getElementById("pw-new-input").style.borderColor = "#dc2626";
+      setTimeout(function(){
+        err.style.display = "none";
+        document.getElementById("pw-new-input").style.borderColor = "#d1d5db";
+      }, 2800);
+      return;
+    }
+    try {
+      const enc = new TextEncoder().encode(v);
+      const hashBuf = await crypto.subtle.digest("SHA-256", enc);
+      const newHash = Array.from(new Uint8Array(hashBuf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+      activeHash = newHash;
+      try { sessionStorage.setItem(SESSION_KEY, "1"); } catch(e){}
+      document.getElementById("pw-new-hash").textContent = newHash;
+      pwShowPanel("pw-panel-done");
+    } catch(e) {
+      err.textContent = "Hash error. Please try again.";
+      err.style.display = "block";
+    }
+  }
+
+  function pwToggleNew() {
+    const i = document.getElementById("pw-new-input");
+    i.type = i.type === "password" ? "text" : "password";
+  }
+
+  async function pwUnlock() {
+    const v = document.getElementById("pw-input").value;
+    const err = document.getElementById("pw-error");
+    try {
+      const enc = new TextEncoder().encode(v);
+      const hashBuf = await crypto.subtle.digest("SHA-256", enc);
+      const hashHex = Array.from(new Uint8Array(hashBuf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+      if (hashHex === activeHash) {
+        try { sessionStorage.setItem(SESSION_KEY, "1"); } catch(e){}
+        pwDismissOverlay();
+      } else {
+        err.style.display = "block";
+        document.getElementById("pw-input").style.borderColor = "#dc2626";
+        setTimeout(() => { err.style.display = "none";
+          document.getElementById("pw-input").style.borderColor = "#d1d5db"; }, 2800);
+      }
+    } catch(e) {
+      err.textContent = "Verification error. Please try again.";
+      err.style.display = "block";
     }
   }
 
@@ -681,42 +901,26 @@ nav::-webkit-scrollbar { display: none; }
 
   function isAuthValid() {
     try {
-      const ts = sessionStorage.getItem(SESSION_KEY);
-      if (!ts) return false;
-      return (Date.now() - parseInt(ts, 10)) < TIMEOUT_MS;
+      return !!sessionStorage.getItem(SESSION_KEY);
     } catch(e) { return false; }
   }
 
-  let _watcherInterval = null;
-  function startTimeoutWatcher() {
-    if (_watcherInterval) clearInterval(_watcherInterval);
-    _watcherInterval = setInterval(function() {
-      if (!isAuthValid()) {
-        try { sessionStorage.removeItem(SESSION_KEY); } catch(e){}
-        // Reset input and show overlay again
-        const inp = document.getElementById("pw-input");
-        if (inp) { inp.value = ""; inp.type = "password"; }
-        const err = document.getElementById("pw-error");
-        if (err) err.style.display = "none";
-        const ol = document.getElementById("pw-overlay");
-        if (ol) { ol.style.opacity = "1"; ol.style.display = "flex"; }
-        clearInterval(_watcherInterval);
-        _watcherInterval = null;
-      }
-    }, 30000); // check every 30 seconds
-  }
+  window.pwUnlock       = pwUnlock;
+  window.pwToggle       = pwToggle;
+  window.pwToggleNew    = pwToggleNew;
+  window.pwShowReset    = pwShowReset;
+  window.pwShowLogin    = pwShowLogin;
+  window.pwCheckEmail   = pwCheckEmail;
+  window.pwSetNew       = pwSetNew;
+  window.pwDismissOverlay = pwDismissOverlay;
 
-  window.pwUnlock = pwUnlock;
-  window.pwToggle = pwToggle;
-
-  // On load: check if auth is still valid (within 7 min), else show overlay
+  // On load: check sessionStorage — present = authenticated this tab session
   // sessionStorage is automatically cleared when tab/browser/computer closes
   if (isAuthValid()) {
     try {
       const ol = document.getElementById("pw-overlay");
       if (ol) ol.style.display = "none";
     } catch(e){}
-    startTimeoutWatcher();
   }
 
   // Block keyboard shortcuts on overlay
@@ -772,7 +976,7 @@ nav::-webkit-scrollbar { display: none; }
   <div class="section-head">KPI Overview — Q1 2023</div>
   <div class="narrative-box">
     <div class="narrative-title">📊 Key Insights</div>
-    <ul class="narrative-list"><li>The restaurant generated <strong>$160,783</strong> in total revenue across Q1 2023 (90 days), averaging <strong>$1,786/day</strong> and <strong>$29.96 per order</strong>.</li><li>With <strong>5,366 orders</strong> and <strong>12,218 items sold</strong>, customers ordered an average of <strong>2.28 items per visit</strong> — indicating strong upsell and combo performance.</li><li>Italian cuisine led revenue at <strong>31% share ($49,852)</strong>, followed by Asian at 29.3% — together accounting for over 60% of total revenue.</li><li>March was the strongest month at <strong>$55,997</strong>, while February — despite the fewest days — delivered the highest average daily revenue at <strong>$1,832/day</strong>.</li></ul>
+    <ul class="narrative-list"><li>The restaurant generated <strong>$160,783</strong> in total revenue across Q1 2023 (90 days), averaging <strong>$1,786/day</strong> and <strong>$29.96 per order</strong>.</li><li>With <strong>5,366 orders</strong> and <strong>12,217 items sold</strong>, customers ordered an average of <strong>2.28 items per visit</strong> — indicating strong upsell and combo performance.</li><li>Italian cuisine led revenue at <strong>31% share ($49,852)</strong>, followed by Asian at 29.3% — together accounting for over 60% of total revenue.</li><li>March was the strongest month at <strong>$55,123</strong>, while February — despite the fewest days — delivered the highest average daily revenue at <strong>$1,832/day</strong>.</li></ul>
   </div>
 
 
@@ -827,7 +1031,7 @@ nav::-webkit-scrollbar { display: none; }
   <div class="section-head">Daily &amp; Hourly Revenue — Q1 2023</div>
   <div class="narrative-box">
     <div class="narrative-title">📊 Key Insights</div>
-    <ul class="narrative-list"><li>Lunch dominates revenue at <strong>58% ($93,254)</strong> vs dinner at 42% ($67,529), with twin peaks at <strong>12:00 ($21,874)</strong> and <strong>19:00 ($21,120)</strong>.</li><li>The mid-afternoon trough (15:00–16:00, ~$7,280 combined) represents an underutilised window — a targeted afternoon promotion could recover incremental revenue.</li><li>Evening trade (18:00–21:00) accounts for approximately <strong>$72,720 (45%)</strong> of daily revenue, making dinner service operationally critical despite lower volume.</li><li>Revenue drops sharply after 22:00 ($1,476) — late-night trade contributes less than 1% of daily revenue and may not justify full staffing.</li></ul>
+    <ul class="narrative-list"><li>Dinner leads revenue at <strong>54.2% ($87,161)</strong> vs lunch at 45.8% ($73,621), with a midday lunch peak at <strong>12:00 ($21,874)</strong> and an early-evening shoulder at <strong>17:00 ($18,039)</strong>.</li><li>The mid-afternoon trough (15:00–16:00, ~$7,280 combined) represents an underutilised window — a targeted afternoon promotion could recover incremental revenue.</li><li>Evening trade (18:00–21:00) accounts for approximately <strong>$72,720 (45%)</strong> of daily revenue, making dinner service operationally critical despite lower volume.</li><li>Revenue drops sharply after 22:00 ($1,476) — late-night trade contributes less than 1% of daily revenue and may not justify full staffing.</li></ul>
   </div>
 
 
@@ -883,7 +1087,7 @@ nav::-webkit-scrollbar { display: none; }
   <div class="section-head">Revenue &amp; Orders by Table — Q1 2023</div>
   <div class="narrative-box">
     <div class="narrative-title">📊 Key Insights</div>
-    <ul class="narrative-list"><li>Table revenue is <strong>tightly clustered</strong> across all 15 tables, ranging from <strong>$10,310 (T15)</strong> to <strong>$11,852 (T14)</strong> — a spread of just $1,542.</li><li>T14 is the top-performing table at <strong>$11,852 revenue and 395 orders</strong>, suggesting it may benefit from superior placement, lighting, or server assignment.</li><li>T15 and T07 are the lowest performers by both revenue and orders — worth reviewing their positioning or service flow for improvement opportunities.</li><li>The narrow revenue spread across tables indicates <strong>consistent operational execution</strong> rather than table-driven variance, with performance driven more by time-of-day patterns.</li></ul>
+    <ul class="narrative-list"><li>Table revenue is <strong>tightly clustered</strong> across all 15 tables, ranging from <strong>$10,147 (T15)</strong> to <strong>$11,852 (T14)</strong> — a spread of just $1,705.</li><li>T14 is the top-performing table at <strong>$11,852 revenue and 377 orders</strong>, suggesting it may benefit from superior placement, lighting, or server assignment.</li><li>T15 and T11 are the lowest performers by revenue — worth reviewing their positioning or service flow for improvement opportunities.</li><li>The narrow revenue spread across tables indicates <strong>consistent operational execution</strong> rather than table-driven variance, with performance driven more by time-of-day patterns.</li></ul>
   </div>
 
 
@@ -972,7 +1176,7 @@ nav::-webkit-scrollbar { display: none; }
   <div class="section-head">Trends — Q1 2023</div>
   <div class="narrative-box">
     <div class="narrative-title">📊 Key Insights</div>
-    <ul class="narrative-list"><li>Weekly revenue held in a <strong>narrow $11,870–$12,740 band</strong> across all 13 weeks, indicating stable and predictable demand without significant volatility.</li><li><strong>Week 11 ($12,740)</strong> was the peak week and <strong>Week 5 ($11,870)</strong> the trough — a difference of just 7%, pointing to a highly consistent operation.</li><li>March was the strongest month at <strong>$55,997</strong>, with Weeks 10–12 all above $12,290 — a late-Q1 momentum build that may reflect seasonal dining patterns.</li><li>The flat weekly trend suggests revenue growth will require deliberate intervention — new menu items, promotional events, or expanded capacity — rather than organic lift.</li></ul>
+    <ul class="narrative-list"><li>Weekly revenue held in a <strong>narrow $11,095–$13,643 band</strong> across all 13 weeks, indicating stable and predictable demand without significant volatility.</li><li><strong>Week 5 ($13,643)</strong> was the peak week and <strong>Week 13 ($11,095)</strong> the trough — a difference of just 19%, pointing to a highly consistent operation.</li><li>March was the strongest month at <strong>$55,123</strong>, with Weeks 9–11 all above $12,467 — a late-Q1 momentum build that may reflect seasonal dining patterns.</li><li>The flat weekly trend suggests revenue growth will require deliberate intervention — new menu items, promotional events, or expanded capacity — rather than organic lift.</li></ul>
   </div>
 
 
@@ -1019,6 +1223,14 @@ nav::-webkit-scrollbar { display: none; }
       </table>
     </div>
   </div>
+
+  <div class="card">
+    <div class="card-title">Category Revenue by Month</div>
+    <div class="chart-wrap" style="height:270px">
+      <canvas id="chart-cuisine-by-month"></canvas>
+    </div>
+    <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1028,7 +1240,7 @@ nav::-webkit-scrollbar { display: none; }
   <div class="section-head">February 2023 Deep-Dive</div>
   <div class="narrative-box">
     <div class="narrative-title">📊 Key Insights</div>
-    <ul class="narrative-list"><li>Despite having the <strong>fewest days (28)</strong>, February achieved the <strong>highest average daily revenue at $1,832</strong> — outperforming January ($1,725) and March ($1,806).</li><li>February lunch revenue ($29,520) and dinner revenue ($21,776) both tracked closely to Q1 averages, suggesting no single daypart drove the outperformance — it was broad-based.</li><li>February hourly revenue exceeded the Q1 average at key peak hours (12:00: $22,400 vs $21,874; 19:00: $21,800 vs $21,120), amplifying the daily revenue advantage.</li><li>The February premium is likely driven by <strong>Valentine's Day</strong> (14 Feb) dining demand — a high-value event to plan proactively with set menus and reservation management in Q1 2024.</li></ul>
+    <ul class="narrative-list"><li>Despite having the <strong>fewest days (28)</strong>, February achieved the <strong>highest average daily revenue at $1,832</strong> — outperforming January ($1,754) and March ($1,778).</li><li>February dinner revenue ($27,782) exceeded lunch ($23,518), mirroring the Q1 dinner-dominant split (54.2% dinner). No single daypart drove outperformance — it was broad-based across all hours.</li><li>February hourly revenue tracks closely to Q1 averages across most hours, with slight peaks at 12:00 and 13:00. The outperformance reflects broad-based consistency across all dayparts rather than a single standout hour.</li><li>The February premium is likely driven by <strong>Valentine's Day</strong> (14 Feb) dining demand — a high-value event to plan proactively with set menus and reservation management in Q1 2024.</li></ul>
   </div>
 
 
@@ -1050,6 +1262,14 @@ nav::-webkit-scrollbar { display: none; }
       <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
   </div>
+
+  <div class="card">
+    <div class="card-title">February Daily Revenue vs Order Count</div>
+    <div class="chart-wrap" style="height:250px">
+      <canvas id="chart-feb-rev-orders"></canvas>
+    </div>
+    <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1059,7 +1279,7 @@ nav::-webkit-scrollbar { display: none; }
   <div class="section-head">Day Segments — Q1 2023</div>
   <div class="narrative-box">
     <div class="narrative-title">📊 Key Insights</div>
-    <ul class="narrative-list"><li><strong>Monday is the strongest day</strong> at $2,017 avg daily revenue — 31% above Wednesday ($1,540), which is the weakest day of the week.</li><li>The mid-week trough (Wed–Thu) is a clear structural pattern: Wednesday ($1,540) and Thursday ($1,690) consistently underperform. Targeted mid-week promotions or events could close the gap.</li><li>Weekend performance is solid — Saturday ($1,960) and Sunday ($1,880) rank 2nd and 3rd — but neither surpasses Monday, suggesting weekday loyal regulars are the primary revenue driver.</li><li>Friday ($1,850) shows a modest pre-weekend lift but does not spike as sharply as might be expected, indicating the restaurant's customer base skews toward regular weekday diners over weekend occasion visitors.</li></ul>
+    <ul class="narrative-list"><li><strong>Monday is the strongest day</strong> at $2,017 avg daily revenue — 31% above Wednesday ($1,540), which is the weakest day of the week.</li><li>The mid-week trough (Wed–Thu) is a clear structural pattern: Wednesday ($1,540) and Thursday ($1,702) consistently underperform. Targeted mid-week promotions or events could close the gap.</li><li>Weekend performance is solid — Friday ($1,840) and Sunday ($1,802) rank near the top — but neither surpasses Monday, suggesting weekday loyal regulars are the primary revenue driver.</li><li>Saturday ($1,783) is mid-table, showing the restaurant's customer base skews toward regular weekday diners over weekend occasion visitors.</li></ul>
   </div>
 
 
@@ -1093,11 +1313,11 @@ nav::-webkit-scrollbar { display: none; }
       <div style="padding:20px 0">
         <div class="kpi-tile" style="margin-bottom:10px">
           <div class="kpi-label">Lunch Revenue (58%)</div>
-          <div class="kpi-value">$93,254</div>
+          <div class="kpi-value" id="kpi-lunch-rev"></div>
         </div>
         <div class="kpi-tile">
           <div class="kpi-label">Dinner Revenue (42%)</div>
-          <div class="kpi-value">$67,529</div>
+          <div class="kpi-value" id="kpi-dinner-rev"></div>
         </div>
       <div class="chart-click-note"><em><strong>Click on chart for details</strong></em></div>
     </div>
@@ -1121,6 +1341,15 @@ nav::-webkit-scrollbar { display: none; }
 <section class="tab-section" id="tab-monday">
   <div class="section-head">Monday Analysis — Best-Performing Day</div>
 
+  <div class="card" style="padding:16px">
+    <div class="card-title">Key Finding</div>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.6">
+      Monday is the highest-revenue day of the week at <strong>$2,017 avg/day</strong> — 14% above the Q1 weekday average of $1,770.
+      The driver is <strong>dinner volume (18:00–20:00)</strong>, not elevated average spend.
+      Monday dinner orders concentrate in the 6–8pm window, suggesting loyal regulars returning after the weekend.
+    </p>
+  </div>
+
   <div class="grid-3" id="monday-kpis"></div>
 
   <div class="grid-2">
@@ -1140,14 +1369,6 @@ nav::-webkit-scrollbar { display: none; }
     </div>
   </div>
 
-  <div class="card" style="padding:16px">
-    <div class="card-title">Key Finding</div>
-    <p style="font-size:14px; color:var(--text-secondary); line-height:1.6">
-      Monday is the highest-revenue day of the week at <strong>$2,017 avg/day</strong> — 14% above the Q1 weekday average of $1,770.
-      The driver is <strong>dinner volume (18:00–20:00)</strong>, not elevated average spend.
-      Monday dinner orders concentrate in the 6–8pm window, suggesting loyal regulars returning after the weekend.
-    </p>
-  </div>
 </section>
 
 <!-- =========================================================
@@ -1155,6 +1376,16 @@ nav::-webkit-scrollbar { display: none; }
      ========================================================= -->
 <section class="tab-section" id="tab-holiday">
   <div class="section-head">Holiday Analysis — Q1 2023 (4 US Federal Holidays)</div>
+
+  <div class="card" style="padding:16px">
+    <div class="card-title">Recommendation</div>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.6">
+      Holiday revenue averages <strong>$2,075/day — 17% above regular days</strong>.
+      Holiday dinner per table is <strong>$75.70</strong>, the highest of any segment.
+      <strong>Recommendation: Dinner-only operation on federal holidays (17:00–22:00)</strong> —
+      consolidates revenue into peak hours, reduces labour costs, and capitalises on elevated per-table spend.
+    </p>
+  </div>
 
   <div class="grid-4" id="holiday-kpis"></div>
 
@@ -1185,15 +1416,6 @@ nav::-webkit-scrollbar { display: none; }
     </div>
   </div>
 
-  <div class="card" style="padding:16px; margin-top:0">
-    <div class="card-title">Recommendation</div>
-    <p style="font-size:14px; color:var(--text-secondary); line-height:1.6">
-      Holiday revenue averages <strong>$2,075/day — 17% above regular days</strong>.
-      Holiday dinner per table is <strong>$67.74</strong>, the highest of any segment.
-      <strong>Recommendation: Dinner-only operation on federal holidays (17:00–22:00)</strong> —
-      consolidates revenue into peak hours, reduces labour costs, and capitalises on elevated per-table spend.
-    </p>
-  </div>
 </section>
 
 <!-- =========================================================
@@ -1234,6 +1456,11 @@ function initHeader() {
   document.getElementById('excl-flag').innerHTML =
     `<strong>⚠ Data Note:</strong> ${D.meta.excluded_rows.count} rows excluded — ${D.meta.excluded_rows.reason}. ` +
     `Order IDs: ${D.meta.excluded_rows.order_ids.join(', ')}. No revenue impact. Awaiting POS investigation.`;
+  // Meal period KPI tiles (computed from data)
+  const lunchEl = document.getElementById('kpi-lunch-rev');
+  const dinnerEl = document.getElementById('kpi-dinner-rev');
+  if (lunchEl)  lunchEl.textContent  = fmt$(D.meal_periods.lunch_rev);
+  if (dinnerEl) dinnerEl.textContent = fmt$(D.meal_periods.dinner_rev);
 }
 
 /* ---- KPI Tiles ---- */
@@ -1377,7 +1604,7 @@ function initFebKPIs() {
     { label:'Feb Avg Daily Revenue', value: fmt$(D.february.avg_daily_rev), sub:'Best month in Q1' },
     { label:'Feb Lunch Revenue',     value: fmt$(D.february.lunch_rev),     sub:'28 days' },
     { label:'Feb Dinner Revenue',    value: fmt$(D.february.dinner_rev),    sub:'28 days' },
-    { label:'vs Q1 Daily Avg',       value: '+$45.53',                      sub:'Feb outperforms Q1 avg' }
+    { label:'vs Q1 Daily Avg',       value: '+' + fmt$(D.february.avg_daily_rev - D.kpis.avg_daily_revenue), sub:'Feb outperforms Q1 avg' }
   ].map(t => `<div class="kpi-tile">
     <div class="kpi-label">${t.label}</div>
     <div class="kpi-value">${t.value}</div>
@@ -1766,18 +1993,69 @@ function buildCharts() {
     }
   });
 
-  /* Holiday meal */
+  /* Holiday meal — splits from D.holiday_meal (computed from source data) */
   destroyChart('hol-meal');
   charts['hol-meal'] = new Chart(document.getElementById('chart-hol-meal'), {
     type: 'bar',
     data: { labels:['Lunch','Dinner'], datasets:[
-      { label:'Holiday Avg', data:[Math.round(D.holiday_summary.holiday_avg_daily*.42), Math.round(D.holiday_summary.holiday_avg_daily*.58)], backgroundColor:cssVar('--c1'), borderRadius:5 },
-      { label:'Regular Avg', data:[Math.round(D.holiday_summary.regular_avg_daily*.58), Math.round(D.holiday_summary.regular_avg_daily*.42)], backgroundColor:cssVar('--c5'), borderRadius:5 }
+      { label:'Holiday Avg', data:[
+          Math.round(D.holiday_summary.holiday_avg_daily * D.holiday_meal.holiday_lunch_pct/100),
+          Math.round(D.holiday_summary.holiday_avg_daily * D.holiday_meal.holiday_dinner_pct/100)
+        ], backgroundColor:cssVar('--c1'), borderRadius:5 },
+      { label:'Regular Avg', data:[
+          Math.round(D.holiday_summary.regular_avg_daily * D.holiday_meal.regular_lunch_pct/100),
+          Math.round(D.holiday_summary.regular_avg_daily * D.holiday_meal.regular_dinner_pct/100)
+        ], backgroundColor:cssVar('--c5'), borderRadius:5 }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:cd.legendColor,font:{size:12}}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt$(ctx.raw)}`}},
+        title:{display:true, text:`Holiday: ${D.holiday_meal.holiday_lunch_pct}% Lunch / ${D.holiday_meal.holiday_dinner_pct}% Dinner  |  Regular: ${D.holiday_meal.regular_lunch_pct}% Lunch / ${D.holiday_meal.regular_dinner_pct}% Dinner`, color:cd.tickColor, font:{size:11}}
+      },
+      scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
+               y:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* Cuisine by month — line chart from D.cuisine_by_month */
+  destroyChart('cuisine-by-month');
+  charts['cuisine-by-month'] = new Chart(document.getElementById('chart-cuisine-by-month'), {
+    type: 'line',
+    data: { labels: D.cuisine_by_month.map(m=>m.month), datasets:[
+      { label:'Italian',  data:D.cuisine_by_month.map(m=>m.Italian),  borderColor:cssVar('--c1'), backgroundColor:'transparent', tension:.3, pointRadius:4, borderWidth:2 },
+      { label:'Asian',    data:D.cuisine_by_month.map(m=>m.Asian),    borderColor:cssVar('--c2'), backgroundColor:'transparent', tension:.3, pointRadius:4, borderWidth:2 },
+      { label:'Mexican',  data:D.cuisine_by_month.map(m=>m.Mexican),  borderColor:cssVar('--c3'), backgroundColor:'transparent', tension:.3, pointRadius:4, borderWidth:2 },
+      { label:'American', data:D.cuisine_by_month.map(m=>m.American), borderColor:cssVar('--c4'), backgroundColor:'transparent', tension:.3, pointRadius:4, borderWidth:2 }
     ]},
     options: { responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{labels:{color:cd.legendColor,font:{size:12}}}, tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt$(ctx.raw)}`}} },
       scales:{ x:{ticks:{color:cd.tickColor},grid:{display:false}},
                y:{ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}} }
+    }
+  });
+
+  /* February hourly revenue vs orders — dual-axis */
+  const febWeeks     = D.february.hourly_vs_q1_delta.map(h=>h.label);
+  const febRevByHour = D.february.hourly_vs_q1_delta.map(h=>h.feb);
+  const febOrdByHour = D.february.hourly_vs_q1_delta.map((h,i)=>
+    D.hourly[i] ? Math.round(h.feb / (D.hourly[i].revenue||1) * D.hourly[i].orders) : 0
+  );
+  destroyChart('feb-rev-orders');
+  charts['feb-rev-orders'] = new Chart(document.getElementById('chart-feb-rev-orders'), {
+    type: 'bar',
+    data: { labels: febWeeks, datasets:[
+      { label:'Revenue ($)', data:febRevByHour, backgroundColor:cssVar('--c1'), borderRadius:3, yAxisID:'y' },
+      { label:'Orders',      data:febOrdByHour, type:'line', borderColor:cssVar('--c2'), backgroundColor:'transparent',
+        tension:.3, pointRadius:3, borderWidth:2, yAxisID:'y1' }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:cd.legendColor,font:{size:12}}}, tooltip:{mode:'index',intersect:false,
+        callbacks:{label:ctx=>ctx.dataset.yAxisID==='y1'?` Orders: ${ctx.raw}`:` Revenue: ${fmt$(ctx.raw)}`}} },
+      scales:{
+        x:{ticks:{color:cd.tickColor,font:{size:10}},grid:{display:false}},
+        y:{position:'left',  ticks:{color:cd.tickColor,callback:v=>'$'+v.toLocaleString()},grid:{color:cd.gridColor}},
+        y1:{position:'right', ticks:{color:cd.tickColor}, grid:{display:false}}
+      }
     }
   });
 }
